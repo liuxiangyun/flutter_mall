@@ -42,8 +42,8 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    //app第一个页面传入设计稿尺寸
-    ScreenUtil(width: 750, height: 1334)..init(context);
+    //app第一个页面传入设计稿尺寸作为基准值做屏幕适配
+    ScreenUtil(width: 1125, height: 2436)..init(context);
 
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(

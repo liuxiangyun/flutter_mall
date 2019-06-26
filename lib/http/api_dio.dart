@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'dart:io';
 
-const baseUrl = 'http://v.jspang.com:8088/baixing/';
+const baseUrl = 'https://wxmini.baixingliangfan.cn/baixing/';
 
 ///debug模式，release包设置为false
 const debug = true;

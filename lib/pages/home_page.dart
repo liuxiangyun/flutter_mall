@@ -3,6 +3,7 @@ import 'package:flutter_mall/http/api_server.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text('百姓生活+'),
         ),
@@ -30,17 +32,27 @@ class HomePageState extends State<HomePage> {
                 List<Map> slides = (data['data']['slides'] as List).cast();
                 List<Map> navCategorys =
                     (data['data']['category'] as List).cast();
-                return Column(
-                  children: <Widget>[
-                    SwiperPicture(
-                        data: slides
-                            .map((slide) => slide['image'])
-                            .toList()
-                            .cast()),
-                    NavigateCategory(
-                      data: navCategorys,
-                    ),
-                  ],
+                return SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      SlidesImage(
+                          images: slides
+                              .map((slide) => slide['image'])
+                              .toList()
+                              .cast()),
+                      NavigateCategory(
+                        categorys: navCategorys,
+                      ),
+                      AdBanner(
+                        adPicUrl: data['data']['advertesPicture']
+                            ['PICTURE_ADDRESS'],
+                      ),
+                      ShopInfo(
+                        leaderImage: data['data']['shopInfo']['leaderImage'],
+                        leaderPhone: data['data']['shopInfo']['leaderPhone'],
+                      )
+                    ],
+                  ),
                 );
               } else {
                 return Center(
@@ -66,28 +78,28 @@ class HomePageState extends State<HomePage> {
 }
 
 ///轮播图
-class SwiperPicture extends StatelessWidget {
-  final List<String> data;
+class SlidesImage extends StatelessWidget {
+  final List<String> images;
 
-  SwiperPicture({Key key, @required this.data})
-      : assert(data != null),
+  SlidesImage({Key key, @required this.images})
+      : assert(images != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: ScreenUtil().setHeight(333),
+      height: ScreenUtil().setWidth(500),
       child: Swiper.children(
-        children: data
+        children: images
             .map((url) => FadeInImage.assetNetwork(
                   placeholder: 'images/banner_placeholder.png',
                   image: url,
                   fit: BoxFit.fill,
                 ))
             .toList(),
-        autoplay: true,
-        pagination: SwiperPagination(),
+        autoplay: images.length > 1,
+        pagination: images.length > 1 ? new SwiperPagination() : null,
       ),
     );
   }
@@ -95,39 +107,57 @@ class SwiperPicture extends StatelessWidget {
 
 ///导航分类
 class NavigateCategory extends StatelessWidget {
-  final List data;
+  final List categorys;
 
-  NavigateCategory({Key key, @required this.data})
-      : assert(data != null),
+  NavigateCategory({Key key, @required this.categorys})
+      : assert(categorys != null),
         super(key: key);
 
-  Widget _createItem({@required String picUrl, @required String picText}) {
-    assert(picUrl != null &&
-        picUrl.isNotEmpty &&
-        picText != null &&
-        picText.isNotEmpty);
+  Widget _createItem(
+      {@required String categoryImage, @required String categoryName}) {
+    assert(categoryImage != null && categoryImage.isNotEmpty);
+    assert(categoryName != null && categoryName.isNotEmpty);
+
     return InkWell(
       child: Column(
         children: <Widget>[
           FadeInImage.assetNetwork(
-              placeholder: 'images/banner_placeholder', image: picUrl),
-          Text(picText, maxLines: 1, overflow: TextOverflow.ellipsis),
+            placeholder: 'images/banner_placeholder',
+            image: categoryImage,
+            width: ScreenUtil().setWidth(140),
+            height: ScreenUtil().setWidth(140),
+            fit: BoxFit.fill,
+          ),
+          Text(
+            categoryName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: ScreenUtil().setSp(36)),
+          ),
         ],
       ),
-      onTap: () {
-        print('navigate category onTap');
-      },
+      onTap: () => print('navigate category onTap'),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    //只显示10个多余的remove
+    if (categorys.length > 10) {
+      categorys.removeRange(10, categorys.length);
+    }
+
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+      width: double.infinity,
+      height: ScreenUtil().setWidth(484),
+      padding: EdgeInsets.only(top: 12, bottom: 5),
       child: GridView.count(
         crossAxisCount: 5,
-        children: data.map((img) {
-          _createItem(picUrl: img['image'], picText: img['text']);
+        physics: NeverScrollableScrollPhysics(),
+        children: categorys.map((category) {
+          return _createItem(
+              categoryImage: category['image'],
+              categoryName: category['mallCategoryName']);
         }).toList(),
       ),
     );
@@ -145,17 +175,49 @@ class AdBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
+      height: ScreenUtil().setWidth(151),
       child: FadeInImage.assetNetwork(
-          placeholder: 'images/banner_placeholder', image: adPicUrl),
+        placeholder: 'images/banner_placeholder',
+        image: adPicUrl,
+        fit: BoxFit.fill,
+      ),
     );
   }
 }
 
-///店长电话
-class StoreManager extends StatelessWidget {
+///店铺信息
+class ShopInfo extends StatelessWidget {
+  final String leaderImage;
+  final String leaderPhone;
+
+  ShopInfo({Key key, this.leaderImage, this.leaderPhone})
+      : assert(leaderImage != null),
+        assert(leaderPhone != null),
+        super(key: key);
+
+  void _launchPhone() async {
+    String url = 'tel:$leaderPhone';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
+    return InkWell(
+      child: Container(
+        width: double.infinity,
+        height: ScreenUtil().setWidth(358),
+        child: FadeInImage.assetNetwork(
+          placeholder: 'images/banner_placeholder',
+          image: leaderImage,
+          fit: BoxFit.fill,
+        ),
+      ),
+      onTap: () => _launchPhone(),
+    );
   }
 }
