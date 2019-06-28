@@ -19,7 +19,7 @@ class ApiDio {
   ApiDio._internal() {
     //配置dio
     dio.options.baseUrl = baseUrl;
-    dio.options.headers = {'devicesType': 'android'};
+//    dio.options.headers = {'devicesType': 'android'};
     dio.options.connectTimeout = 30000;
     dio.options.receiveTimeout = 30000;
     dio.options.sendTimeout = 30000;
