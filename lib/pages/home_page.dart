@@ -16,10 +16,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
   Future _future = indexContent();
+  bool success=false;
 
   @override
   void initState() {
     super.initState();
+    _getHotProducts(true);
+  }
+
+  void _refresh() {
+    setState(() {
+      _future = indexContent();
+    });
     _getHotProducts(true);
   }
 
@@ -34,6 +42,7 @@ class _HomePageState extends State<HomePage>
         body: FutureBuilder(
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              success=true;
               //请求成功
               var data = json.decode(snapshot.data.toString());
               if (data['code'] == '0') {
@@ -57,12 +66,9 @@ class _HomePageState extends State<HomePage>
 
                 return FlutterRefresh(
                     onRefresh: () async {
-                      setState(() {
-                        _future = indexContent();
-                      });
-                      _getHotProducts(true);
+                      _refresh();
                     },
-                    autoLoad:true,
+                    autoLoad: true,
                     loadMore: () async {
                       _getHotProducts(false);
                     },
@@ -117,7 +123,13 @@ class _HomePageState extends State<HomePage>
             } else if (snapshot.hasError) {
               //请求失败
               return Center(
-                child: Text(snapshot.error.toString()),
+                child: InkWell(
+                  child: Text(
+                    '${snapshot.error.toString()}\n\n点击重试',
+                    textAlign: TextAlign.center,
+                  ),
+                  onTap: () => _refresh(),
+                ),
               );
             } else {
               //请求中
