@@ -50,6 +50,11 @@ class _HomePageState extends State<HomePage>
               IndexEntity indexEntity = IndexEntity.fromJson(srcJson);
 
               if (indexEntity.code == '0') {
+                List<Recommend> recommends = new List();
+                recommends
+                  ..addAll(indexEntity.data.recommend)
+                  ..addAll(indexEntity.data.recommend)
+                  ..addAll(indexEntity.data.recommend);
                 return FlutterRefresh(
                     onRefresh: () async {
                       _refresh();
@@ -79,7 +84,7 @@ class _HomePageState extends State<HomePage>
                             newUser: indexEntity.data.newUser,
                           ),
                           ProductRecommend(
-                            recommends: indexEntity.data.recommend,
+                            recommends: recommends,
                           ),
                           ProductFloor(
                             floorPic: indexEntity.data.floor1Pic,
