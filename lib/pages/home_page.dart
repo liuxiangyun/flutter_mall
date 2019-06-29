@@ -7,6 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter_mall/res/color.dart';
 import 'package:flutter_mall/widget/flutter_refresh.dart';
+import 'package:flutter_mall/model/index_entity.dart';
+import 'package:flutter_mall/model/hot_product_entity.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -16,7 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
   Future _future = indexContent();
-  bool success=false;
+  bool success = false;
 
   @override
   void initState() {
@@ -42,28 +44,12 @@ class _HomePageState extends State<HomePage>
         body: FutureBuilder(
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              success=true;
+              success = true;
               //请求成功
-              var data = json.decode(snapshot.data.toString());
-              if (data['code'] == '0') {
-                List<Map> slides = (data['data']['slides'] as List).cast();
-                List<Map> navCategorys =
-                    (data['data']['category'] as List).cast();
-                List<Map> promotions = List<Map>();
-                promotions.add(data['data']['saoma']);
-                promotions.add(data['data']['integralMallPic']);
-                promotions.add(data['data']['newUser']);
-                List<Map> recommends = List<Map>();
-                recommends.addAll((data['data']['recommend'] as List).cast());
-                recommends.addAll((data['data']['recommend'] as List).cast());
-                recommends.addAll((data['data']['recommend'] as List).cast());
-                String floor1Pic = data['data']['floor1Pic']['PICTURE_ADDRESS'];
-                String floor2Pic = data['data']['floor2Pic']['PICTURE_ADDRESS'];
-                String floor3Pic = data['data']['floor3Pic']['PICTURE_ADDRESS'];
-                List<Map> floor1 = (data['data']['floor1'] as List).cast();
-                List<Map> floor2 = (data['data']['floor2'] as List).cast();
-                List<Map> floor3 = (data['data']['floor3'] as List).cast();
+              var srcJson = json.decode(snapshot.data.toString());
+              IndexEntity indexEntity = IndexEntity.fromJson(srcJson);
 
+              if (indexEntity.code == '0') {
                 return FlutterRefresh(
                     onRefresh: () async {
                       _refresh();
@@ -76,40 +62,36 @@ class _HomePageState extends State<HomePage>
                       child: Column(
                         children: <Widget>[
                           SlidesImage(
-                              images: slides
-                                  .map((slide) => slide['image'])
-                                  .toList()
-                                  .cast()),
+                            slides: indexEntity.data.slides,
+                          ),
                           NavigateCategory(
-                            categorys: navCategorys,
+                            categorys: indexEntity.data.category,
                           ),
                           AdBanner(
-                            adPicUrl: data['data']['advertesPicture']
-                                ['PICTURE_ADDRESS'],
+                            advertesPicture: indexEntity.data.advertesPicture,
                           ),
-                          ShopInfo(
-                            leaderImage: data['data']['shopInfo']
-                                ['leaderImage'],
-                            leaderPhone: data['data']['shopInfo']
-                                ['leaderPhone'],
+                          MallInfo(
+                            shopInfo: indexEntity.data.shopInfo,
                           ),
                           Promotion(
-                            promotions: promotions,
+                            saoma: indexEntity.data.saoma,
+                            integralMallPic: indexEntity.data.integralMallPic,
+                            newUser: indexEntity.data.newUser,
                           ),
                           ProductRecommend(
-                            recommends: recommends,
+                            recommends: indexEntity.data.recommend,
                           ),
                           ProductFloor(
-                            floorCategory: floor1Pic,
-                            floorProducts: floor1,
+                            floorPic: indexEntity.data.floor1Pic,
+                            floor: indexEntity.data.floor1,
                           ),
                           ProductFloor(
-                            floorCategory: floor2Pic,
-                            floorProducts: floor2,
+                            floorPic: indexEntity.data.floor2Pic,
+                            floor: indexEntity.data.floor2,
                           ),
                           ProductFloor(
-                            floorCategory: floor3Pic,
-                            floorProducts: floor3,
+                            floorPic: indexEntity.data.floor3Pic,
+                            floor: indexEntity.data.floor3,
                           ),
                           _getHotProductWrap(),
                         ],
@@ -117,7 +99,7 @@ class _HomePageState extends State<HomePage>
                     ));
               } else {
                 return Center(
-                  child: Text(data['message']),
+                  child: Text(indexEntity.message),
                 );
               }
             } else if (snapshot.hasError) {
@@ -148,7 +130,7 @@ class _HomePageState extends State<HomePage>
 
   ///火爆商品
   int _page = 1;
-  List<Map> _hotProducts = List<Map>();
+  List<HotProduct> _hotProducts = List<HotProduct>();
 
   void _getHotProducts(bool isRefresh) {
     if (isRefresh) {
@@ -156,14 +138,15 @@ class _HomePageState extends State<HomePage>
     }
 
     hotProducts(_page).then((onValue) {
-      var data = json.decode(onValue.toString());
-      if (data['code'] == '0') {
+      var srcJson = json.decode(onValue.toString());
+      HotProductEntity hotProductEntity = HotProductEntity.fromJson(srcJson);
+      if (hotProductEntity.code == '0') {
         setState(() {
           if (isRefresh) {
             _hotProducts.clear();
           }
           _page++;
-          _hotProducts.addAll((data['data'] as List).cast());
+          _hotProducts.addAll(hotProductEntity.data);
         });
       }
     });
@@ -191,7 +174,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget _createHotProduct(item) {
+  Widget _createHotProduct(HotProduct product) {
     return Container(
       color: Colors.white,
       width: ScreenUtil().setWidth(540),
@@ -200,7 +183,7 @@ class _HomePageState extends State<HomePage>
         children: <Widget>[
           FadeInImage.memoryNetwork(
             placeholder: kTransparentImage,
-            image: item['image'],
+            image: product.image,
             width: ScreenUtil().setWidth(400),
             height: ScreenUtil().setWidth(400),
             fit: BoxFit.contain,
@@ -208,7 +191,7 @@ class _HomePageState extends State<HomePage>
           Padding(
             padding: EdgeInsets.only(top: 10),
             child: Text(
-              item['name'],
+              product.name,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                   fontSize: ScreenUtil().setSp(36), color: primarySwatchColor),
@@ -218,14 +201,14 @@ class _HomePageState extends State<HomePage>
             children: <Widget>[
               Expanded(
                 child: Text(
-                  '￥${item['mallPrice']}',
+                  '￥${product.mallPrice}',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: ScreenUtil().setSp(34)),
                 ),
               ),
               Expanded(
                   child: Text(
-                '￥${item['price']}',
+                '￥${product.price}',
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     color: Colors.grey[400],
@@ -242,10 +225,10 @@ class _HomePageState extends State<HomePage>
 
 ///轮播图
 class SlidesImage extends StatelessWidget {
-  final List<String> images;
+  final List<Slides> slides;
 
-  SlidesImage({Key key, @required this.images})
-      : assert(images != null),
+  SlidesImage({Key key, @required this.slides})
+      : assert(slides != null),
         super(key: key);
 
   @override
@@ -255,15 +238,15 @@ class SlidesImage extends StatelessWidget {
       width: double.infinity,
       height: ScreenUtil().setWidth(500),
       child: Swiper.children(
-        children: images
-            .map((url) => FadeInImage.memoryNetwork(
+        children: slides
+            .map((slide) => FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
-                  image: url,
+                  image: slide.image,
                   fit: BoxFit.fill,
                 ))
             .toList(),
-        autoplay: images.length > 1,
-        pagination: images.length > 1 ? new SwiperPagination() : null,
+        autoplay: slides.length > 1,
+        pagination: slides.length > 1 ? new SwiperPagination() : null,
       ),
     );
   }
@@ -271,29 +254,25 @@ class SlidesImage extends StatelessWidget {
 
 ///导航分类
 class NavigateCategory extends StatelessWidget {
-  final List categorys;
+  final List<Category> categorys;
 
   NavigateCategory({Key key, @required this.categorys})
       : assert(categorys != null),
         super(key: key);
 
-  Widget _createItem(
-      {@required String categoryImage, @required String categoryName}) {
-    assert(categoryImage != null && categoryImage.isNotEmpty);
-    assert(categoryName != null && categoryName.isNotEmpty);
-
+  Widget _createItem({@required Category category}) {
     return InkWell(
       child: Column(
         children: <Widget>[
           FadeInImage.memoryNetwork(
             placeholder: kTransparentImage,
-            image: categoryImage,
+            image: category.image,
             width: ScreenUtil().setWidth(140),
             height: ScreenUtil().setWidth(140),
             fit: BoxFit.fill,
           ),
           Text(
-            categoryName,
+            category.mallCategoryName,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(fontSize: ScreenUtil().setSp(36)),
@@ -320,9 +299,7 @@ class NavigateCategory extends StatelessWidget {
         crossAxisCount: 5,
         physics: NeverScrollableScrollPhysics(),
         children: categorys.map((category) {
-          return _createItem(
-              categoryImage: category['image'],
-              categoryName: category['mallCategoryName']);
+          return _createItem(category: category);
         }).toList(),
       ),
     );
@@ -331,10 +308,10 @@ class NavigateCategory extends StatelessWidget {
 
 ///AD banner
 class AdBanner extends StatelessWidget {
-  final String adPicUrl;
+  final AdvertesPicture advertesPicture;
 
-  AdBanner({Key key, @required this.adPicUrl})
-      : assert(adPicUrl != null),
+  AdBanner({Key key, @required this.advertesPicture})
+      : assert(advertesPicture != null),
         super(key: key);
 
   @override
@@ -344,7 +321,7 @@ class AdBanner extends StatelessWidget {
       width: double.infinity,
       child: FadeInImage.memoryNetwork(
         placeholder: kTransparentImage,
-        image: adPicUrl,
+        image: advertesPicture.image,
         fit: BoxFit.fill,
       ),
     );
@@ -352,17 +329,17 @@ class AdBanner extends StatelessWidget {
 }
 
 ///店铺信息
-class ShopInfo extends StatelessWidget {
-  final String leaderImage;
-  final String leaderPhone;
+class MallInfo extends StatelessWidget {
+  final ShopInfo shopInfo;
 
-  ShopInfo({Key key, @required this.leaderImage, @required this.leaderPhone})
-      : assert(leaderImage != null),
-        assert(leaderPhone != null),
+  MallInfo({
+    Key key,
+    @required this.shopInfo,
+  })  : assert(shopInfo != null),
         super(key: key);
 
   void _launchPhone() async {
-    String url = 'tel:$leaderPhone';
+    String url = 'tel:$shopInfo.leaderPhone';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -379,7 +356,7 @@ class ShopInfo extends StatelessWidget {
         width: double.infinity,
         child: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
-          image: leaderImage,
+          image: shopInfo.leaderImage,
           fit: BoxFit.fill,
         ),
       ),
@@ -390,17 +367,25 @@ class ShopInfo extends StatelessWidget {
 
 ///促销
 class Promotion extends StatelessWidget {
-  final List promotions;
+  final Saoma saoma;
+  final IntegralMallPic integralMallPic;
+  final NewUser newUser;
 
-  Promotion({Key key, @required this.promotions})
-      : assert(promotions != null),
+  Promotion(
+      {Key key,
+      @required this.saoma,
+      @required this.integralMallPic,
+      @required this.newUser})
+      : assert(saoma != null),
+        assert(integralMallPic != null),
+        assert(newUser != null),
         super(key: key);
 
-  Widget _createItem(var item) {
+  Widget _createItem(String image) {
     return Container(
       child: FadeInImage.memoryNetwork(
         placeholder: kTransparentImage,
-        image: item['PICTURE_ADDRESS'],
+        image: image,
         width: ScreenUtil().setWidth(360),
         height: ScreenUtil().setWidth(424),
         fit: BoxFit.cover,
@@ -414,17 +399,21 @@ class Promotion extends StatelessWidget {
       color: Colors.white,
       alignment: Alignment.topLeft,
       height: ScreenUtil().setWidth(450),
-      child: ListView.builder(
-          itemBuilder: (context, index) => _createItem(promotions[index]),
-          itemCount: promotions.length,
-          scrollDirection: Axis.horizontal),
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: <Widget>[
+          _createItem(saoma.image),
+          _createItem(integralMallPic.image),
+          _createItem(newUser.image),
+        ],
+      ),
     );
   }
 }
 
 ///商品推荐
 class ProductRecommend extends StatelessWidget {
-  final List recommends;
+  final List<Recommend> recommends;
 
   ProductRecommend({Key key, @required this.recommends})
       : assert(recommends != null),
@@ -453,7 +442,7 @@ class ProductRecommend extends StatelessWidget {
   }
 
   //商品
-  Widget _createItem(var item) {
+  Widget _createItem(Recommend recommend) {
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -464,17 +453,17 @@ class ProductRecommend extends StatelessWidget {
         children: <Widget>[
           FadeInImage.memoryNetwork(
             placeholder: kTransparentImage,
-            image: item['image'],
+            image: recommend.image,
             width: ScreenUtil().setWidth(300),
             height: ScreenUtil().setWidth(300),
             fit: BoxFit.contain,
           ),
           Text(
-            '￥${item['mallPrice']}',
+            '￥${recommend.mallPrice}',
             style: TextStyle(fontSize: ScreenUtil().setSp(36)),
           ),
           Text(
-            '￥${item['price']}',
+            '￥${recommend.price}',
             style: TextStyle(
                 color: Colors.grey[400],
                 decoration: TextDecoration.lineThrough,
@@ -506,13 +495,12 @@ class ProductRecommend extends StatelessWidget {
 
 ///楼层
 class ProductFloor extends StatelessWidget {
-  final String floorCategory;
-  final List floorProducts;
+  final FloorPic floorPic;
+  final List<Floor> floor;
 
-  ProductFloor(
-      {Key key, @required this.floorCategory, @required this.floorProducts})
-      : assert(floorCategory != null),
-        assert(floorProducts != null),
+  ProductFloor({Key key, @required this.floorPic, @required this.floor})
+      : assert(floorPic != null),
+        assert(floor != null),
         super(key: key);
 
   Widget _createFloorCategory() {
@@ -523,7 +511,7 @@ class ProductFloor extends StatelessWidget {
       alignment: Alignment.center,
       child: FadeInImage.memoryNetwork(
         placeholder: kTransparentImage,
-        image: floorCategory,
+        image: floorPic.image,
         width: ScreenUtil().setWidth(1000),
       ),
     );
@@ -547,19 +535,19 @@ class ProductFloor extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              _createProduct(floorProducts[0]['image']),
+              _createProduct(floor[0].image),
               Column(
                 children: <Widget>[
-                  _createProduct(floorProducts[1]['image']),
-                  _createProduct(floorProducts[2]['image']),
+                  _createProduct(floor[1].image),
+                  _createProduct(floor[2].image),
                 ],
               ),
             ],
           ),
           Row(
             children: <Widget>[
-              _createProduct(floorProducts[3]['image']),
-              _createProduct(floorProducts[4]['image']),
+              _createProduct(floor[3].image),
+              _createProduct(floor[4].image),
             ],
           ),
         ],
