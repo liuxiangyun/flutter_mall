@@ -1,11 +1,9 @@
-import 'package:json_annotation/json_annotation.dart'; 
-  
-part 'index_entity.g.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'home_entity.g.dart';
 
 @JsonSerializable()
-  class IndexEntity extends Object {
-
+class HomeEntity extends Object {
   @JsonKey(name: 'code')
   String code;
 
@@ -15,18 +13,20 @@ part 'index_entity.g.dart';
   @JsonKey(name: 'data')
   Data data;
 
-  IndexEntity(this.code,this.message,this.data,);
+  HomeEntity(
+    this.code,
+    this.message,
+    this.data,
+  );
 
-  factory IndexEntity.fromJson(Map<String, dynamic> srcJson) => _$IndexEntityFromJson(srcJson);
+  factory HomeEntity.fromJson(Map<String, dynamic> srcJson) =>
+      _$HomeEntityFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$IndexEntityToJson(this);
-
+  Map<String, dynamic> toJson() => _$HomeEntityToJson(this);
 }
 
-  
 @JsonSerializable()
-  class Data extends Object {
-
+class Data extends Object {
   @JsonKey(name: 'slides')
   List<Slides> slides;
 
@@ -75,95 +75,113 @@ part 'index_entity.g.dart';
   @JsonKey(name: 'category')
   List<Category> category;
 
-
-
   @JsonKey(name: 'reservationGoods')
   List<dynamic> reservationGoods;
 
-  Data(this.slides,this.shopInfo,this.integralMallPic,this.toShareCode,this.recommend,this.advertesPicture,this.floor1,this.floor2,this.floor3,this.saoma,this.newUser,this.floor1Pic,this.floor2Pic,this.floorName,this.category,this.floor3Pic,this.reservationGoods,);
+  Data(
+    this.slides,
+    this.shopInfo,
+    this.integralMallPic,
+    this.toShareCode,
+    this.recommend,
+    this.advertesPicture,
+    this.floor1,
+    this.floor2,
+    this.floor3,
+    this.saoma,
+    this.newUser,
+    this.floor1Pic,
+    this.floor2Pic,
+    this.floorName,
+    this.category,
+    this.floor3Pic,
+    this.reservationGoods,
+  );
 
-  factory Data.fromJson(Map<String, dynamic> srcJson) => _$DataFromJson(srcJson);
+  factory Data.fromJson(Map<String, dynamic> srcJson) =>
+      _$DataFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$DataToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class Slides extends Object {
-
+class Slides extends Object {
   @JsonKey(name: 'image')
   String image;
 
   @JsonKey(name: 'goodsId')
   String goodsId;
 
-  Slides(this.image,this.goodsId,);
+  Slides(
+    this.image,
+    this.goodsId,
+  );
 
-  factory Slides.fromJson(Map<String, dynamic> srcJson) => _$SlidesFromJson(srcJson);
+  factory Slides.fromJson(Map<String, dynamic> srcJson) =>
+      _$SlidesFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$SlidesToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class ShopInfo extends Object {
-
+class ShopInfo extends Object {
   @JsonKey(name: 'leaderImage')
   String leaderImage;
 
   @JsonKey(name: 'leaderPhone')
   String leaderPhone;
 
-  ShopInfo(this.leaderImage,this.leaderPhone,);
+  ShopInfo(
+    this.leaderImage,
+    this.leaderPhone,
+  );
 
-  factory ShopInfo.fromJson(Map<String, dynamic> srcJson) => _$ShopInfoFromJson(srcJson);
+  factory ShopInfo.fromJson(Map<String, dynamic> srcJson) =>
+      _$ShopInfoFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$ShopInfoToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class IntegralMallPic extends Object {
-
+class IntegralMallPic extends Object {
   @JsonKey(name: 'PICTURE_ADDRESS')
   String image;
 
   @JsonKey(name: 'TO_PLACE')
   String tOPLACE;
 
-  IntegralMallPic(this.image,this.tOPLACE,);
+  IntegralMallPic(
+    this.image,
+    this.tOPLACE,
+  );
 
-  factory IntegralMallPic.fromJson(Map<String, dynamic> srcJson) => _$IntegralMallPicFromJson(srcJson);
+  factory IntegralMallPic.fromJson(Map<String, dynamic> srcJson) =>
+      _$IntegralMallPicFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$IntegralMallPicToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class ToShareCode extends Object {
-
+class ToShareCode extends Object {
   @JsonKey(name: 'PICTURE_ADDRESS')
   String pICTUREADDRESS;
 
   @JsonKey(name: 'TO_PLACE')
   String tOPLACE;
 
-  ToShareCode(this.pICTUREADDRESS,this.tOPLACE,);
+  ToShareCode(
+    this.pICTUREADDRESS,
+    this.tOPLACE,
+  );
 
-  factory ToShareCode.fromJson(Map<String, dynamic> srcJson) => _$ToShareCodeFromJson(srcJson);
+  factory ToShareCode.fromJson(Map<String, dynamic> srcJson) =>
+      _$ToShareCodeFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$ToShareCodeToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class Recommend extends Object {
-
+class Recommend extends Object {
   @JsonKey(name: 'image')
   String image;
 
@@ -179,108 +197,118 @@ part 'index_entity.g.dart';
   @JsonKey(name: 'price')
   double price;
 
-  Recommend(this.image,this.mallPrice,this.goodsName,this.goodsId,this.price,);
+  Recommend(
+    this.image,
+    this.mallPrice,
+    this.goodsName,
+    this.goodsId,
+    this.price,
+  );
 
-  factory Recommend.fromJson(Map<String, dynamic> srcJson) => _$RecommendFromJson(srcJson);
+  factory Recommend.fromJson(Map<String, dynamic> srcJson) =>
+      _$RecommendFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$RecommendToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class AdvertesPicture extends Object {
-
+class AdvertesPicture extends Object {
   @JsonKey(name: 'PICTURE_ADDRESS')
   String image;
 
   @JsonKey(name: 'TO_PLACE')
   String tOPLACE;
 
-  AdvertesPicture(this.image,this.tOPLACE,);
+  AdvertesPicture(
+    this.image,
+    this.tOPLACE,
+  );
 
-  factory AdvertesPicture.fromJson(Map<String, dynamic> srcJson) => _$AdvertesPictureFromJson(srcJson);
+  factory AdvertesPicture.fromJson(Map<String, dynamic> srcJson) =>
+      _$AdvertesPictureFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$AdvertesPictureToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class Floor extends Object {
-
+class Floor extends Object {
   @JsonKey(name: 'image')
   String image;
 
   @JsonKey(name: 'goodsId')
   String goodsId;
 
-  Floor(this.image,this.goodsId,);
+  Floor(
+    this.image,
+    this.goodsId,
+  );
 
-  factory Floor.fromJson(Map<String, dynamic> srcJson) => _$FloorFromJson(srcJson);
+  factory Floor.fromJson(Map<String, dynamic> srcJson) =>
+      _$FloorFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$FloorToJson(this);
-
 }
-  
-@JsonSerializable()
-  class Saoma extends Object {
 
+@JsonSerializable()
+class Saoma extends Object {
   @JsonKey(name: 'PICTURE_ADDRESS')
   String image;
 
   @JsonKey(name: 'TO_PLACE')
   String tOPLACE;
 
-  Saoma(this.image,this.tOPLACE,);
+  Saoma(
+    this.image,
+    this.tOPLACE,
+  );
 
-  factory Saoma.fromJson(Map<String, dynamic> srcJson) => _$SaomaFromJson(srcJson);
+  factory Saoma.fromJson(Map<String, dynamic> srcJson) =>
+      _$SaomaFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$SaomaToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class NewUser extends Object {
-
+class NewUser extends Object {
   @JsonKey(name: 'PICTURE_ADDRESS')
   String image;
 
   @JsonKey(name: 'TO_PLACE')
   String tOPLACE;
 
-  NewUser(this.image,this.tOPLACE,);
+  NewUser(
+    this.image,
+    this.tOPLACE,
+  );
 
-  factory NewUser.fromJson(Map<String, dynamic> srcJson) => _$NewUserFromJson(srcJson);
+  factory NewUser.fromJson(Map<String, dynamic> srcJson) =>
+      _$NewUserFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$NewUserToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class FloorPic extends Object {
-
+class FloorPic extends Object {
   @JsonKey(name: 'PICTURE_ADDRESS')
   String image;
 
   @JsonKey(name: 'TO_PLACE')
   String tOPLACE;
 
-  FloorPic(this.image,this.tOPLACE,);
+  FloorPic(
+    this.image,
+    this.tOPLACE,
+  );
 
-  factory FloorPic.fromJson(Map<String, dynamic> srcJson) => _$FloorPicFromJson(srcJson);
+  factory FloorPic.fromJson(Map<String, dynamic> srcJson) =>
+      _$FloorPicFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$FloorPicToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class FloorName extends Object {
+class FloorName extends Object {
   @JsonKey(name: 'floor1')
-
   String floor1;
 
   @JsonKey(name: 'floor2')
@@ -289,18 +317,20 @@ part 'index_entity.g.dart';
   @JsonKey(name: 'floor3')
   String floor3;
 
-  FloorName(this.floor1,this.floor2,this.floor3,);
+  FloorName(
+    this.floor1,
+    this.floor2,
+    this.floor3,
+  );
 
-  factory FloorName.fromJson(Map<String, dynamic> srcJson) => _$FloorNameFromJson(srcJson);
+  factory FloorName.fromJson(Map<String, dynamic> srcJson) =>
+      _$FloorNameFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$FloorNameToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class Category extends Object {
-
+class Category extends Object {
   @JsonKey(name: 'mallCategoryId')
   String mallCategoryId;
 
@@ -313,18 +343,21 @@ part 'index_entity.g.dart';
   @JsonKey(name: 'image')
   String image;
 
-  Category(this.mallCategoryId,this.mallCategoryName,this.bxMallSubDto,this.image,);
+  Category(
+    this.mallCategoryId,
+    this.mallCategoryName,
+    this.bxMallSubDto,
+    this.image,
+  );
 
-  factory Category.fromJson(Map<String, dynamic> srcJson) => _$CategoryFromJson(srcJson);
+  factory Category.fromJson(Map<String, dynamic> srcJson) =>
+      _$CategoryFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class BxMallSubDto extends Object {
-
+class BxMallSubDto extends Object {
   @JsonKey(name: 'mallSubId')
   String mallSubId;
 
@@ -337,12 +370,15 @@ part 'index_entity.g.dart';
   @JsonKey(name: 'comments')
   String comments;
 
-  BxMallSubDto(this.mallSubId,this.mallCategoryId,this.mallSubName,this.comments,);
+  BxMallSubDto(
+    this.mallSubId,
+    this.mallCategoryId,
+    this.mallSubName,
+    this.comments,
+  );
 
-  factory BxMallSubDto.fromJson(Map<String, dynamic> srcJson) => _$BxMallSubDtoFromJson(srcJson);
+  factory BxMallSubDto.fromJson(Map<String, dynamic> srcJson) =>
+      _$BxMallSubDtoFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$BxMallSubDtoToJson(this);
-
 }
-
-  

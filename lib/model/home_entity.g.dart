@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'index_entity.dart';
+part of 'home_entity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-IndexEntity _$IndexEntityFromJson(Map<String, dynamic> json) {
-  return IndexEntity(
+HomeEntity _$HomeEntityFromJson(Map<String, dynamic> json) {
+  return HomeEntity(
       json['code'] as String,
       json['message'] as String,
       json['data'] == null
@@ -15,7 +15,7 @@ IndexEntity _$IndexEntityFromJson(Map<String, dynamic> json) {
           : Data.fromJson(json['data'] as Map<String, dynamic>));
 }
 
-Map<String, dynamic> _$IndexEntityToJson(IndexEntity instance) =>
+Map<String, dynamic> _$HomeEntityToJson(HomeEntity instance) =>
     <String, dynamic>{
       'code': instance.code,
       'message': instance.message,

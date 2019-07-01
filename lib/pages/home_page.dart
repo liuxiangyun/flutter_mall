@@ -7,8 +7,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter_mall/res/color.dart';
 import 'package:flutter_mall/widget/flutter_refresh.dart';
-import 'package:flutter_mall/model/index_entity.dart';
+import 'package:flutter_mall/model/home_entity.dart';
 import 'package:flutter_mall/model/hot_product_entity.dart';
+import 'package:flutter_mall/res/font.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
-  Future _future = indexContent();
+  Future _homeFuture = homeContent();
   bool success = false;
 
   @override
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage>
 
   void _refresh() {
     setState(() {
-      _future = indexContent();
+      _homeFuture = homeContent();
     });
     _getHotProducts(true);
   }
@@ -38,96 +39,101 @@ class _HomePageState extends State<HomePage>
     super.build(context);
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('百姓生活+'),
-        ),
-        body: FutureBuilder(
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              success = true;
-              //请求成功
-              var srcJson = json.decode(snapshot.data.toString());
-              IndexEntity indexEntity = IndexEntity.fromJson(srcJson);
+      appBar: AppBar(
+        title: Text('百姓生活+'),
+      ),
+      body: FutureBuilder(
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            success = true;
+            //请求成功
+            var srcJson = json.decode(snapshot.data.toString());
+            HomeEntity homeEntity = HomeEntity.fromJson(srcJson);
 
-              if (indexEntity.code == '0') {
-                List<Recommend> recommends = new List();
-                recommends
-                  ..addAll(indexEntity.data.recommend)
-                  ..addAll(indexEntity.data.recommend)
-                  ..addAll(indexEntity.data.recommend);
-                return FlutterRefresh(
-                    onRefresh: () async {
-                      _refresh();
-                    },
-                    autoLoad: true,
-                    loadMore: () async {
-                      _getHotProducts(false);
-                    },
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          SlidesImage(
-                            slides: indexEntity.data.slides,
-                          ),
-                          NavigateCategory(
-                            categorys: indexEntity.data.category,
-                          ),
-                          AdBanner(
-                            advertesPicture: indexEntity.data.advertesPicture,
-                          ),
-                          MallInfo(
-                            shopInfo: indexEntity.data.shopInfo,
-                          ),
-                          Promotion(
-                            saoma: indexEntity.data.saoma,
-                            integralMallPic: indexEntity.data.integralMallPic,
-                            newUser: indexEntity.data.newUser,
-                          ),
-                          ProductRecommend(
-                            recommends: recommends,
-                          ),
-                          ProductFloor(
-                            floorPic: indexEntity.data.floor1Pic,
-                            floor: indexEntity.data.floor1,
-                          ),
-                          ProductFloor(
-                            floorPic: indexEntity.data.floor2Pic,
-                            floor: indexEntity.data.floor2,
-                          ),
-                          ProductFloor(
-                            floorPic: indexEntity.data.floor3Pic,
-                            floor: indexEntity.data.floor3,
-                          ),
-                          _getHotProductWrap(),
-                        ],
-                      ),
-                    ));
-              } else {
-                return Center(
-                  child: Text(indexEntity.message),
-                );
-              }
-            } else if (snapshot.hasError) {
-              //请求失败
-              return Center(
-                child: InkWell(
-                  child: Text(
-                    '${snapshot.error.toString()}\n\n点击重试',
-                    textAlign: TextAlign.center,
+            if (homeEntity.code == '0') {
+              List<Recommend> recommends = new List();
+              recommends
+                ..addAll(homeEntity.data.recommend)
+                ..addAll(homeEntity.data.recommend)
+                ..addAll(homeEntity.data.recommend);
+              return FlutterRefresh(
+                onRefresh: () async {
+                  _refresh();
+                },
+                autoLoad: true,
+                loadMore: () async {
+                  _getHotProducts(false);
+                },
+                child: Container(
+                  color: Colors.white,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        SlidesImage(
+                          slides: homeEntity.data.slides,
+                        ),
+                        NavigateCategory(
+                          categorys: homeEntity.data.category,
+                        ),
+                        AdBanner(
+                          advertesPicture: homeEntity.data.advertesPicture,
+                        ),
+                        MallInfo(
+                          shopInfo: homeEntity.data.shopInfo,
+                        ),
+                        Promotion(
+                          saoma: homeEntity.data.saoma,
+                          integralMallPic: homeEntity.data.integralMallPic,
+                          newUser: homeEntity.data.newUser,
+                        ),
+                        ProductRecommend(
+                          recommends: recommends,
+                        ),
+                        ProductFloor(
+                          floorPic: homeEntity.data.floor1Pic,
+                          floor: homeEntity.data.floor1,
+                        ),
+                        ProductFloor(
+                          floorPic: homeEntity.data.floor2Pic,
+                          floor: homeEntity.data.floor2,
+                        ),
+                        ProductFloor(
+                          floorPic: homeEntity.data.floor3Pic,
+                          floor: homeEntity.data.floor3,
+                        ),
+                        _getHotProductWrap(),
+                      ],
+                    ),
                   ),
-                  onTap: () => _refresh(),
                 ),
               );
             } else {
-              //请求中
               return Center(
-                child: Text('加载中...'),
+                child: Text(homeEntity.message),
               );
             }
-          },
-          //接口获取首页信息
-          future: _future,
-        ));
+          } else if (snapshot.hasError) {
+            //请求失败
+            return Center(
+              child: InkWell(
+                child: Text(
+                  '${snapshot.error.toString()}\n\n点击重试',
+                  textAlign: TextAlign.center,
+                ),
+                onTap: () => _refresh(),
+              ),
+            );
+          } else {
+            //请求中
+            return Center(
+              child: Text('加载中...'),
+            );
+          }
+        },
+        //接口获取首页信息
+        future: _homeFuture,
+      ),
+    );
   }
 
   @override
@@ -167,7 +173,9 @@ class _HomePageState extends State<HomePage>
           child: Text(
             '火爆专区',
             style: TextStyle(
-                color: primarySwatchColor, fontSize: ScreenUtil().setSp(40)),
+              color: primarySwatchColor,
+              fontSize: sp_40,
+            ),
           ),
         ),
         Wrap(
@@ -181,7 +189,6 @@ class _HomePageState extends State<HomePage>
 
   Widget _createHotProduct(HotProduct product) {
     return Container(
-      color: Colors.white,
       width: ScreenUtil().setWidth(540),
       padding: EdgeInsets.all(10),
       child: Column(
@@ -195,11 +202,17 @@ class _HomePageState extends State<HomePage>
           ),
           Padding(
             padding: EdgeInsets.only(top: 10),
-            child: Text(
-              product.name,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  fontSize: ScreenUtil().setSp(36), color: primarySwatchColor),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                product.name,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: sp_36,
+                  color: primarySwatchColor,
+                ),
+              ),
             ),
           ),
           Row(
@@ -208,17 +221,22 @@ class _HomePageState extends State<HomePage>
                 child: Text(
                   '￥${product.mallPrice}',
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: ScreenUtil().setSp(34)),
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: sp_34,
+                  ),
                 ),
               ),
               Expanded(
                   child: Text(
                 '￥${product.price}',
                 overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 style: TextStyle(
-                    color: Colors.grey[400],
-                    decoration: TextDecoration.lineThrough,
-                    fontSize: ScreenUtil().setSp(34)),
+                  color: Colors.grey[400],
+                  decoration: TextDecoration.lineThrough,
+                  fontSize: sp_26,
+                ),
               )),
             ],
           ),
@@ -239,7 +257,6 @@ class SlidesImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
       width: double.infinity,
       height: ScreenUtil().setWidth(500),
       child: Swiper.children(
@@ -280,7 +297,9 @@ class NavigateCategory extends StatelessWidget {
             category.mallCategoryName,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: ScreenUtil().setSp(36)),
+            style: TextStyle(
+              fontSize: sp_36,
+            ),
           ),
         ],
       ),
@@ -296,10 +315,12 @@ class NavigateCategory extends StatelessWidget {
     }
 
     return Container(
-      color: Colors.white,
       width: double.infinity,
       height: ScreenUtil().setWidth(484),
-      padding: EdgeInsets.only(top: 12, bottom: 5),
+      padding: EdgeInsets.only(
+        top: 12,
+        bottom: 5,
+      ),
       child: GridView.count(
         crossAxisCount: 5,
         physics: NeverScrollableScrollPhysics(),
@@ -322,7 +343,6 @@ class AdBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
       width: double.infinity,
       child: FadeInImage.memoryNetwork(
         placeholder: kTransparentImage,
@@ -357,7 +377,6 @@ class MallInfo extends StatelessWidget {
     return InkWell(
       child: Container(
         padding: EdgeInsets.only(bottom: 10),
-        color: Colors.white,
         width: double.infinity,
         child: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
@@ -401,7 +420,6 @@ class Promotion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
       alignment: Alignment.topLeft,
       height: ScreenUtil().setWidth(450),
       child: ListView(
@@ -431,17 +449,15 @@ class ProductRecommend extends StatelessWidget {
       alignment: Alignment.centerLeft,
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
         border: Border(
           top: BorderSide(width: 10, color: primaryGrey),
-          bottom: BorderSide(width: 0.5, color: primaryGrey),
+          bottom: BorderSide(width: 1, color: primaryGrey),
         ),
       ),
       child: Text(
         '商品推荐',
-        style: TextStyle(
-            color: Theme.of(context).primaryColor,
-            fontSize: ScreenUtil().setSp(40)),
+        style:
+            TextStyle(color: Theme.of(context).primaryColor, fontSize: sp_40),
       ),
     );
   }
@@ -451,8 +467,7 @@ class ProductRecommend extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(right: BorderSide(width: 0.5, color: primaryGrey)),
+        border: Border(right: BorderSide(width: 1, color: primaryGrey)),
       ),
       child: Column(
         children: <Widget>[
@@ -465,14 +480,14 @@ class ProductRecommend extends StatelessWidget {
           ),
           Text(
             '￥${recommend.mallPrice}',
-            style: TextStyle(fontSize: ScreenUtil().setSp(36)),
+            style: TextStyle(fontSize: sp_36),
           ),
           Text(
             '￥${recommend.price}',
             style: TextStyle(
                 color: Colors.grey[400],
                 decoration: TextDecoration.lineThrough,
-                fontSize: ScreenUtil().setSp(26)),
+                fontSize: sp_26),
           ),
         ],
       ),
@@ -485,7 +500,6 @@ class ProductRecommend extends StatelessWidget {
       children: <Widget>[
         _title(context),
         Container(
-          color: Colors.white,
           alignment: Alignment.topLeft,
           height: ScreenUtil().setWidth(450),
           child: ListView.builder(
@@ -564,7 +578,6 @@ class ProductFloor extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: Colors.white,
       child: Column(
         children: <Widget>[
           _createFloorCategory(),
