@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'hot_product_entity.dart';
+part of 'hot_product_list_entity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-HotProductEntity _$HotProductEntityFromJson(Map<String, dynamic> json) {
-  return HotProductEntity(
+HotProductListEntity _$HotProductListEntityFromJson(Map<String, dynamic> json) {
+  return HotProductListEntity(
       json['code'] as String,
       json['message'] as String,
       (json['data'] as List)
@@ -16,7 +16,8 @@ HotProductEntity _$HotProductEntityFromJson(Map<String, dynamic> json) {
           ?.toList());
 }
 
-Map<String, dynamic> _$HotProductEntityToJson(HotProductEntity instance) =>
+Map<String, dynamic> _$HotProductListEntityToJson(
+        HotProductListEntity instance) =>
     <String, dynamic>{
       'code': instance.code,
       'message': instance.message,

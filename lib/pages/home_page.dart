@@ -6,10 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter_mall/res/color.dart';
-import 'package:flutter_mall/widget/flutter_refresh.dart';
 import 'package:flutter_mall/model/home_entity.dart';
-import 'package:flutter_mall/model/hot_product_entity.dart';
+import 'package:flutter_mall/model/hot_product_list_entity.dart';
 import 'package:flutter_mall/res/font.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter_easyrefresh/material_header.dart';
+import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -51,12 +53,19 @@ class _HomePageState extends State<HomePage>
             HomeEntity homeEntity = HomeEntity.fromJson(srcJson);
 
             if (homeEntity.code == '0') {
-              List<Recommend> recommends = new List();
+              List<Recommend> recommends = [];
               recommends
                 ..addAll(homeEntity.data.recommend)
                 ..addAll(homeEntity.data.recommend)
                 ..addAll(homeEntity.data.recommend);
-              return FlutterRefresh(
+              return EasyRefresh(
+                refreshHeader: MaterialHeader(
+                  key: new GlobalKey<RefreshHeaderState>(),
+                ),
+                refreshFooter: BallPulseFooter(
+                  key: new GlobalKey<RefreshFooterState>(),
+                  color: primarySwatchColor,
+                ),
                 onRefresh: () async {
                   _refresh();
                 },
@@ -101,7 +110,7 @@ class _HomePageState extends State<HomePage>
                           floorPic: homeEntity.data.floor3Pic,
                           floor: homeEntity.data.floor3,
                         ),
-                        _getHotProductWrap(),
+                        _hotProductWrap(),
                       ],
                     ),
                   ),
@@ -109,7 +118,13 @@ class _HomePageState extends State<HomePage>
               );
             } else {
               return Center(
-                child: Text(homeEntity.message),
+                child: InkWell(
+                  child: Text(
+                    '${homeEntity.message}\n\n点击重试',
+                    textAlign: TextAlign.center,
+                  ),
+                  onTap: () => _refresh(),
+                ),
               );
             }
           } else if (snapshot.hasError) {
@@ -141,7 +156,7 @@ class _HomePageState extends State<HomePage>
 
   ///火爆商品
   int _page = 1;
-  List<HotProduct> _hotProducts = List<HotProduct>();
+  List<HotProduct> _hotProducts = [];
 
   void _getHotProducts(bool isRefresh) {
     if (isRefresh) {
@@ -150,20 +165,21 @@ class _HomePageState extends State<HomePage>
 
     hotProducts(_page).then((onValue) {
       var srcJson = json.decode(onValue.toString());
-      HotProductEntity hotProductEntity = HotProductEntity.fromJson(srcJson);
-      if (hotProductEntity.code == '0') {
+      HotProductListEntity hotProductListEntity =
+          HotProductListEntity.fromJson(srcJson);
+      if (hotProductListEntity.code == '0') {
         setState(() {
           if (isRefresh) {
             _hotProducts.clear();
           }
           _page++;
-          _hotProducts.addAll(hotProductEntity.data);
+          _hotProducts.addAll(hotProductListEntity.data);
         });
       }
     });
   }
 
-  Widget _getHotProductWrap() {
+  Widget _hotProductWrap() {
     return Column(
       children: <Widget>[
         Container(
@@ -206,7 +222,6 @@ class _HomePageState extends State<HomePage>
               alignment: Alignment.centerLeft,
               child: Text(
                 product.name,
-                overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 style: TextStyle(
                   fontSize: sp_36,

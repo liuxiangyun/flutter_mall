@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'pages/index_page.dart';
 import 'package:flutter_mall/res/color.dart';
 import 'package:provide/provide.dart';
-import 'package:flutter_mall/provide/second_level_category_provide.dart';
+import 'package:flutter_mall/provides/second_level_category_provide.dart';
+import 'package:flutter_mall/provides/category_product_provide.dart';
 
 final provides = Providers()
-  ..provide(Provider.function((context) => SecondLevelCategoryProvide()));
+  ..provide(Provider.function((context) => SecondLevelCategoryProvide()))
+  ..provide(Provider.function((context) => CategoryProductProvide()));
 
 void main() => runApp(ProviderNode(child: MyApp(), providers: provides));
 

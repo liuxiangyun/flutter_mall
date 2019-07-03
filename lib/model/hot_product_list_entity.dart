@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'hot_product_entity.g.dart';
+part 'hot_product_list_entity.g.dart';
 
 @JsonSerializable()
-class HotProductEntity extends Object {
+class HotProductListEntity extends Object {
   @JsonKey(name: 'code')
   String code;
 
@@ -13,16 +13,16 @@ class HotProductEntity extends Object {
   @JsonKey(name: 'data')
   List<HotProduct> data;
 
-  HotProductEntity(
+  HotProductListEntity(
     this.code,
     this.message,
     this.data,
   );
 
-  factory HotProductEntity.fromJson(Map<String, dynamic> srcJson) =>
-      _$HotProductEntityFromJson(srcJson);
+  factory HotProductListEntity.fromJson(Map<String, dynamic> srcJson) =>
+      _$HotProductListEntityFromJson(srcJson);
 
-  Map<String, dynamic> toJson() => _$HotProductEntityToJson(this);
+  Map<String, dynamic> toJson() => _$HotProductListEntityToJson(this);
 }
 
 @JsonSerializable()

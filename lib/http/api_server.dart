@@ -7,7 +7,7 @@ Future homeContent() async {
       data: {'lon': '115.02932', 'lat': '35.76189'});
 }
 
-///火爆商品
+///火爆商品列表
 Future hotProducts(int page) async {
   return await ApiDio()
       .dio
@@ -17,4 +17,14 @@ Future hotProducts(int page) async {
 ///分类
 Future category() async {
   return await ApiDio().dio.post('wxmini/getCategory');
+}
+
+///分类商品列表
+Future categoryProductList(
+    String categoryId, String categorySubId, int page) async {
+  return await ApiDio().dio.post('wxmini/getMallGoods', data: {
+    'categoryId': categoryId,
+    'categorySubId': categorySubId,
+    'page': page
+  });
 }

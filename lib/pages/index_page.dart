@@ -23,7 +23,7 @@ class _IndexPageState extends State<IndexPage> {
     CartPage(),
     MemberPage(),
   ];
-  final List<BottomNavigationBarItem> bottomNavigationBarItems = List();
+  final List<BottomNavigationBarItem> bottomNavigationBarItems = [];
   int _currentIndex;
 
   @override
