@@ -4,12 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_mall/res/font.dart';
 import 'package:flutter_mall/res/color.dart';
 import 'package:flutter_mall/http/api_server.dart';
-import 'dart:convert';
 import 'package:provide/provide.dart';
 import 'package:flutter_mall/provides/second_level_category_provide.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter_mall/model/category_product_list_entity.dart';
-import 'package:flutter_mall/provides/category_product_provide.dart';
 import 'package:flutter_mall/event/flutter_event_bus.dart';
 import 'package:flutter_mall/event/category_product_event.dart';
 import 'dart:async';
@@ -23,7 +21,7 @@ class CategoryPage extends StatefulWidget {
 }
 
 class CategoryPageState extends State<CategoryPage> {
-  Future _categoryFuture = category();
+  Future<CategoryEntity> _categoryFuture = category();
 
   void _refresh() {
     setState(() {
@@ -40,8 +38,7 @@ class CategoryPageState extends State<CategoryPage> {
       body: FutureBuilder(
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var srcJson = json.decode(snapshot.data.toString());
-            CategoryEntity categoryEntity = CategoryEntity.fromJson(srcJson);
+            CategoryEntity categoryEntity = snapshot.data;
 
             if (categoryEntity.code == '0') {
               return Row(
@@ -87,7 +84,13 @@ class CategoryPageState extends State<CategoryPage> {
               );
             } else {
               return Center(
-                child: Text(categoryEntity.message),
+                child: InkWell(
+                  child: Text(
+                    '${categoryEntity.message}\n\n点击重试',
+                    textAlign: TextAlign.center,
+                  ),
+                  onTap: () => _refresh(),
+                ),
               );
             }
           } else if (snapshot.hasError) {
@@ -104,7 +107,12 @@ class CategoryPageState extends State<CategoryPage> {
           } else {
             //请求中
             return Center(
-              child: Text('加载中...'),
+              child: Text(
+                '加载中...',
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
             );
           }
         },
@@ -290,7 +298,6 @@ class CategoryProductListState extends State<CategoryProductList> {
   int _page = 1;
   List<CategoryProduct> _categoryProducts = [];
   StreamSubscription _categoryProductSubscription;
-  final ScrollController _scrollController = ScrollController();
 
   CategoryProductListState() {
     //注册指定事件监听
@@ -405,11 +412,13 @@ class CategoryProductListState extends State<CategoryProductList> {
       loadMore: () => _getCategoryProductList(false),
       autoLoad: true,
       child: SingleChildScrollView(
-        controller: _scrollController,
         child: _categoryProducts.isEmpty
             ? Center(
                 child: Text(
                   '暂无数据',
+                  style: TextStyle(
+                    color: Colors.grey,
+                  ),
                 ),
               )
             : Wrap(
@@ -427,21 +436,19 @@ class CategoryProductListState extends State<CategoryProductList> {
       setState(() {
         _categoryProducts.clear();
         _page = 1;
-        _scrollController.jumpTo(0.0);
       });
     }
 
-    //请求数据
     categoryProductList(_secondLevelCategory.mallCategoryId,
             _secondLevelCategory.mallSubId, _page)
         .then((onValue) {
-      var srcJson = json.decode(onValue.toString());
-      CategoryProductListEntity categoryProductListEntity =
-          CategoryProductListEntity.fromJson(srcJson);
+      CategoryProductListEntity categoryProductListEntity = onValue;
       if (categoryProductListEntity.code == "0") {
+        _page++;
         setState(() {
-          _categoryProducts.addAll(categoryProductListEntity.data);
-          _page++;
+          if (categoryProductListEntity.data != null) {
+            _categoryProducts.addAll(categoryProductListEntity.data);
+          }
         });
       }
     });

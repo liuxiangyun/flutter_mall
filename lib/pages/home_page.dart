@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mall/http/api_server.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -20,7 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
-  Future _homeFuture = homeContent();
+  Future<HomeEntity> _homeFuture = homeContent();
   bool success = false;
 
   @override
@@ -49,8 +48,7 @@ class _HomePageState extends State<HomePage>
           if (snapshot.hasData) {
             success = true;
             //请求成功
-            var srcJson = json.decode(snapshot.data.toString());
-            HomeEntity homeEntity = HomeEntity.fromJson(srcJson);
+            HomeEntity homeEntity = snapshot.data;
 
             if (homeEntity.code == '0') {
               List<Recommend> recommends = [];
@@ -141,7 +139,10 @@ class _HomePageState extends State<HomePage>
           } else {
             //请求中
             return Center(
-              child: Text('加载中...'),
+              child: Text(
+                '加载中...',
+                style: TextStyle(color: Colors.grey,),
+              ),
             );
           }
         },
@@ -164,9 +165,7 @@ class _HomePageState extends State<HomePage>
     }
 
     hotProducts(_page).then((onValue) {
-      var srcJson = json.decode(onValue.toString());
-      HotProductListEntity hotProductListEntity =
-          HotProductListEntity.fromJson(srcJson);
+      HotProductListEntity hotProductListEntity = onValue;
       if (hotProductListEntity.code == '0') {
         setState(() {
           if (isRefresh) {
