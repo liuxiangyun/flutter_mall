@@ -14,6 +14,8 @@ import 'dart:async';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
+import 'package:flutter_mall/routes/application.dart';
+import 'package:flutter_mall/routes/routes.dart';
 
 class CategoryPage extends StatefulWidget {
   @override
@@ -323,59 +325,63 @@ class CategoryProductListState extends State<CategoryProductList> {
   }
 
   Widget _createCategoryProduct(CategoryProduct product) {
-    return Container(
-      color: Colors.white,
-      width: ScreenUtil().setWidth(415),
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: <Widget>[
-          FadeInImage.memoryNetwork(
-            placeholder: kTransparentImage,
-            image: product.image,
-            width: ScreenUtil().setWidth(400),
-            height: ScreenUtil().setWidth(400),
-            fit: BoxFit.contain,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                product.goodsName,
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: sp_36,
-                  color: primarySwatchColor,
-                ),
-              ),
+    return InkWell(
+      onTap: () => Routes.navigateToProductDetail(
+          context, product.goodsId),
+      child: Container(
+        color: Colors.white,
+        width: ScreenUtil().setWidth(415),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: product.image,
+              width: ScreenUtil().setWidth(400),
+              height: ScreenUtil().setWidth(400),
+              fit: BoxFit.contain,
             ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: Text(
-                  '￥${product.presentPrice}',
-                  overflow: TextOverflow.ellipsis,
+                  product.goodsName,
                   maxLines: 1,
                   style: TextStyle(
-                    fontSize: sp_34,
+                    fontSize: sp_36,
+                    color: primarySwatchColor,
                   ),
                 ),
               ),
-              Expanded(
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
                   child: Text(
-                '￥${product.oriPrice}',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                  color: Colors.grey[400],
-                  decoration: TextDecoration.lineThrough,
-                  fontSize: sp_26,
+                    '￥${product.presentPrice}',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: sp_34,
+                    ),
+                  ),
                 ),
-              )),
-            ],
-          ),
-        ],
+                Expanded(
+                    child: Text(
+                  '￥${product.oriPrice}',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: sp_26,
+                  ),
+                )),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

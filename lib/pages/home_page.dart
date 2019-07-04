@@ -11,6 +11,8 @@ import 'package:flutter_mall/res/font.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
+import 'package:flutter_mall/routes/application.dart';
+import 'package:flutter_mall/routes/routes.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -108,7 +110,7 @@ class _HomePageState extends State<HomePage>
                           floorPic: homeEntity.data.floor3Pic,
                           floor: homeEntity.data.floor3,
                         ),
-                        _hotProductWrap(),
+                        _hotProductWrap(context),
                       ],
                     ),
                   ),
@@ -141,7 +143,9 @@ class _HomePageState extends State<HomePage>
             return Center(
               child: Text(
                 '加载中...',
-                style: TextStyle(color: Colors.grey,),
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
               ),
             );
           }
@@ -178,7 +182,7 @@ class _HomePageState extends State<HomePage>
     });
   }
 
-  Widget _hotProductWrap() {
+  Widget _hotProductWrap(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
@@ -195,66 +199,69 @@ class _HomePageState extends State<HomePage>
         ),
         Wrap(
           children: _hotProducts
-              .map((product) => _createHotProduct(product))
+              .map((product) => _createHotProduct(context, product))
               .toList(),
         ),
       ],
     );
   }
 
-  Widget _createHotProduct(HotProduct product) {
-    return Container(
-      width: ScreenUtil().setWidth(540),
-      padding: EdgeInsets.all(10),
-      child: Column(
-        children: <Widget>[
-          FadeInImage.memoryNetwork(
-            placeholder: kTransparentImage,
-            image: product.image,
-            width: ScreenUtil().setWidth(400),
-            height: ScreenUtil().setWidth(400),
-            fit: BoxFit.contain,
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 10),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                product.name,
-                maxLines: 1,
-                style: TextStyle(
-                  fontSize: sp_36,
-                  color: primarySwatchColor,
-                ),
-              ),
+  Widget _createHotProduct(BuildContext context, HotProduct product) {
+    return InkWell(
+      onTap: () => Routes.navigateToProductDetail(context, product.goodsId),
+      child: Container(
+        width: ScreenUtil().setWidth(540),
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: <Widget>[
+            FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: product.image,
+              width: ScreenUtil().setWidth(400),
+              height: ScreenUtil().setWidth(400),
+              fit: BoxFit.contain,
             ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: Text(
-                  '￥${product.mallPrice}',
-                  overflow: TextOverflow.ellipsis,
+                  product.name,
                   maxLines: 1,
                   style: TextStyle(
-                    fontSize: sp_34,
+                    fontSize: sp_36,
+                    color: primarySwatchColor,
                   ),
                 ),
               ),
-              Expanded(
+            ),
+            Row(
+              children: <Widget>[
+                Expanded(
                   child: Text(
-                '￥${product.price}',
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-                style: TextStyle(
-                  color: Colors.grey[400],
-                  decoration: TextDecoration.lineThrough,
-                  fontSize: sp_26,
+                    '￥${product.mallPrice}',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                      fontSize: sp_34,
+                    ),
+                  ),
                 ),
-              )),
-            ],
-          ),
-        ],
+                Expanded(
+                    child: Text(
+                  '￥${product.price}',
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: sp_26,
+                  ),
+                )),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -275,11 +282,19 @@ class SlidesImage extends StatelessWidget {
       height: ScreenUtil().setWidth(500),
       child: Swiper.children(
         children: slides
-            .map((slide) => FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage,
-                  image: slide.image,
-                  fit: BoxFit.fill,
-                ))
+            .map(
+              (slide) => InkWell(
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: slide.image,
+                      fit: BoxFit.fill,
+                    ),
+                    onTap: () => Routes.navigateToProductDetail(
+                          context,
+                          slide.goodsId,
+                        ),
+                  ),
+            )
             .toList(),
         autoplay: slides.length > 1,
         pagination: slides.length > 1 ? new SwiperPagination() : null,
@@ -477,34 +492,40 @@ class ProductRecommend extends StatelessWidget {
   }
 
   //商品
-  Widget _createItem(Recommend recommend) {
-    return Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border(right: BorderSide(width: 1, color: primaryGrey)),
+  Widget _createItem(BuildContext context, Recommend recommend) {
+    return InkWell(
+      child: Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border(right: BorderSide(width: 1, color: primaryGrey)),
+        ),
+        child: Column(
+          children: <Widget>[
+            FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: recommend.image,
+              width: ScreenUtil().setWidth(300),
+              height: ScreenUtil().setWidth(300),
+              fit: BoxFit.contain,
+            ),
+            Text(
+              '￥${recommend.mallPrice}',
+              style: TextStyle(fontSize: sp_36),
+            ),
+            Text(
+              '￥${recommend.price}',
+              style: TextStyle(
+                  color: Colors.grey[400],
+                  decoration: TextDecoration.lineThrough,
+                  fontSize: sp_26),
+            ),
+          ],
+        ),
       ),
-      child: Column(
-        children: <Widget>[
-          FadeInImage.memoryNetwork(
-            placeholder: kTransparentImage,
-            image: recommend.image,
-            width: ScreenUtil().setWidth(300),
-            height: ScreenUtil().setWidth(300),
-            fit: BoxFit.contain,
+      onTap: () => Routes.navigateToProductDetail(
+            context,
+            recommend.goodsId,
           ),
-          Text(
-            '￥${recommend.mallPrice}',
-            style: TextStyle(fontSize: sp_36),
-          ),
-          Text(
-            '￥${recommend.price}',
-            style: TextStyle(
-                color: Colors.grey[400],
-                decoration: TextDecoration.lineThrough,
-                fontSize: sp_26),
-          ),
-        ],
-      ),
     );
   }
 
@@ -517,7 +538,10 @@ class ProductRecommend extends StatelessWidget {
           alignment: Alignment.topLeft,
           height: ScreenUtil().setWidth(450),
           child: ListView.builder(
-              itemBuilder: (context, index) => _createItem(recommends[index]),
+              itemBuilder: (context, index) => _createItem(
+                    context,
+                    recommends[index],
+                  ),
               itemCount: recommends.length,
               scrollDirection: Axis.horizontal),
         ),
@@ -550,37 +574,43 @@ class ProductFloor extends StatelessWidget {
     );
   }
 
-  Widget _createProduct(String picUrl) {
-    return Container(
-      width: ScreenUtil().setWidth(540),
-      child: FadeInImage.memoryNetwork(
-        placeholder: kTransparentImage,
-        image: picUrl,
-        fit: BoxFit.cover,
+  Widget _createProduct(BuildContext context, Floor floor) {
+    return InkWell(
+      child: Container(
+        width: ScreenUtil().setWidth(540),
+        child: FadeInImage.memoryNetwork(
+          placeholder: kTransparentImage,
+          image: floor.image,
+          fit: BoxFit.cover,
+        ),
       ),
+      onTap: () => Routes.navigateToProductDetail(
+            context,
+            floor.goodsId,
+          ),
     );
   }
 
-  Widget _crateFloorProducts() {
+  Widget _crateFloorProducts(BuildContext context) {
     return Container(
       width: double.infinity,
       child: Column(
         children: <Widget>[
           Row(
             children: <Widget>[
-              _createProduct(floor[0].image),
+              _createProduct(context, floor[0]),
               Column(
                 children: <Widget>[
-                  _createProduct(floor[1].image),
-                  _createProduct(floor[2].image),
+                  _createProduct(context, floor[1]),
+                  _createProduct(context, floor[2]),
                 ],
               ),
             ],
           ),
           Row(
             children: <Widget>[
-              _createProduct(floor[3].image),
-              _createProduct(floor[4].image),
+              _createProduct(context, floor[3]),
+              _createProduct(context, floor[4]),
             ],
           ),
         ],
@@ -595,7 +625,7 @@ class ProductFloor extends StatelessWidget {
       child: Column(
         children: <Widget>[
           _createFloorCategory(),
-          _crateFloorProducts(),
+          _crateFloorProducts(context),
         ],
       ),
     );
