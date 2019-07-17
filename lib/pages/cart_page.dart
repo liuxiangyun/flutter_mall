@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///购物车
 class CartPage extends StatefulWidget {
   @override
   CartPageState createState() => CartPageState();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+///会员中心
 class MemberPage extends StatefulWidget {
   @override
   MemberPageState createState() => MemberPageState();

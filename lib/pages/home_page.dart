@@ -11,9 +11,9 @@ import 'package:flutter_mall/res/font.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
-import 'package:flutter_mall/routes/application.dart';
 import 'package:flutter_mall/routes/routes.dart';
 
+///首页
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage>
     return Column(
       children: <Widget>[
         Container(
-          color: primaryGrey,
+          color: darkGrey,
           padding: EdgeInsets.all(10),
           alignment: Alignment.center,
           child: Text(
@@ -284,16 +284,16 @@ class SlidesImage extends StatelessWidget {
         children: slides
             .map(
               (slide) => InkWell(
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: slide.image,
-                      fit: BoxFit.fill,
-                    ),
-                    onTap: () => Routes.navigateToProductDetail(
-                          context,
-                          slide.goodsId,
-                        ),
-                  ),
+                child: FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: slide.image,
+                  fit: BoxFit.fill,
+                ),
+                onTap: () => Routes.navigateToProductDetail(
+                  context,
+                  slide.goodsId,
+                ),
+              ),
             )
             .toList(),
         autoplay: slides.length > 1,
@@ -373,6 +373,7 @@ class AdBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      height: ScreenUtil().setWidth(151),
       child: FadeInImage.memoryNetwork(
         placeholder: kTransparentImage,
         image: advertesPicture.image,
@@ -407,6 +408,7 @@ class MallInfo extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(bottom: 10),
         width: double.infinity,
+        height: ScreenUtil().setWidth(358.5),
         child: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
           image: shopInfo.leaderImage,
@@ -441,7 +443,7 @@ class Promotion extends StatelessWidget {
         image: image,
         width: ScreenUtil().setWidth(360),
         height: ScreenUtil().setWidth(424),
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
       ),
     );
   }
@@ -479,8 +481,8 @@ class ProductRecommend extends StatelessWidget {
       padding: EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border(
-          top: BorderSide(width: 10, color: primaryGrey),
-          bottom: BorderSide(width: 1, color: primaryGrey),
+          top: BorderSide(width: 10, color: lightGrey),
+          bottom: BorderSide(width: 1, color: lightGrey),
         ),
       ),
       child: Text(
@@ -497,7 +499,7 @@ class ProductRecommend extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          border: Border(right: BorderSide(width: 1, color: primaryGrey)),
+          border: Border(right: BorderSide(width: 1, color: lightGrey)),
         ),
         child: Column(
           children: <Widget>[
@@ -523,9 +525,9 @@ class ProductRecommend extends StatelessWidget {
         ),
       ),
       onTap: () => Routes.navigateToProductDetail(
-            context,
-            recommend.goodsId,
-          ),
+        context,
+        recommend.goodsId,
+      ),
     );
   }
 
@@ -562,7 +564,7 @@ class ProductFloor extends StatelessWidget {
 
   Widget _createFloorCategory() {
     return Container(
-      color: primaryGrey,
+      color: darkGrey,
       padding: EdgeInsets.only(top: 10, bottom: 10),
       width: double.infinity,
       alignment: Alignment.center,
@@ -570,24 +572,26 @@ class ProductFloor extends StatelessWidget {
         placeholder: kTransparentImage,
         image: floorPic.image,
         width: ScreenUtil().setWidth(1000),
+        height: ScreenUtil().setWidth(289.28),
       ),
     );
   }
 
-  Widget _createProduct(BuildContext context, Floor floor) {
+  Widget _createProduct(BuildContext context, Floor floor, double height) {
     return InkWell(
       child: Container(
         width: ScreenUtil().setWidth(540),
+        height: height,
         child: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
           image: floor.image,
-          fit: BoxFit.cover,
+          fit: BoxFit.fill,
         ),
       ),
       onTap: () => Routes.navigateToProductDetail(
-            context,
-            floor.goodsId,
-          ),
+        context,
+        floor.goodsId,
+      ),
     );
   }
 
@@ -598,19 +602,21 @@ class ProductFloor extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              _createProduct(context, floor[0]),
+              _createProduct(context, floor[0], ScreenUtil().setWidth(583.33)),
               Column(
                 children: <Widget>[
-                  _createProduct(context, floor[1]),
-                  _createProduct(context, floor[2]),
+                  _createProduct(
+                      context, floor[1], ScreenUtil().setWidth(291.66)),
+                  _createProduct(
+                      context, floor[2], ScreenUtil().setWidth(291.66)),
                 ],
               ),
             ],
           ),
           Row(
             children: <Widget>[
-              _createProduct(context, floor[3]),
-              _createProduct(context, floor[4]),
+              _createProduct(context, floor[3], ScreenUtil().setWidth(291.66)),
+              _createProduct(context, floor[4], ScreenUtil().setWidth(291.66)),
             ],
           ),
         ],

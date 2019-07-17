@@ -14,9 +14,9 @@ import 'dart:async';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_easyrefresh/ball_pulse_footer.dart';
-import 'package:flutter_mall/routes/application.dart';
 import 'package:flutter_mall/routes/routes.dart';
 
+///分类
 class CategoryPage extends StatefulWidget {
   @override
   CategoryPageState createState() => CategoryPageState();
@@ -53,7 +53,7 @@ class CategoryPageState extends State<CategoryPage> {
                       border: Border(
                         right: BorderSide(
                           width: 1,
-                          color: primaryGrey,
+                          color: lightGrey,
                         ),
                       ),
                     ),
@@ -71,7 +71,7 @@ class CategoryPageState extends State<CategoryPage> {
                             border: Border(
                               bottom: BorderSide(
                                 width: 1,
-                                color: primaryGrey,
+                                color: lightGrey,
                               ),
                             ),
                           ),
@@ -160,9 +160,9 @@ class FirstLevelCategoryState extends State<LeftFirstLevelCategory> {
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: _clickIndex == _index ? primaryGrey : Colors.white,
+          color: _clickIndex == _index ? lightGrey : Colors.white,
           border: Border(
-            bottom: BorderSide(width: 1, color: primaryGrey),
+            bottom: BorderSide(width: 1, color: lightGrey),
           ),
         ),
         child: Text(
@@ -326,8 +326,7 @@ class CategoryProductListState extends State<CategoryProductList> {
 
   Widget _createCategoryProduct(CategoryProduct product) {
     return InkWell(
-      onTap: () => Routes.navigateToProductDetail(
-          context, product.goodsId),
+      onTap: () => Routes.navigateToProductDetail(context, product.goodsId),
       child: Container(
         color: Colors.white,
         width: ScreenUtil().setWidth(415),

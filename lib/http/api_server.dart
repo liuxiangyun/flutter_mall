@@ -4,6 +4,7 @@ import 'package:flutter_mall/model/home_entity.dart';
 import 'package:flutter_mall/model/hot_product_list_entity.dart';
 import 'package:flutter_mall/model/category_entity.dart';
 import 'package:flutter_mall/model/category_product_list_entity.dart';
+import 'package:flutter_mall/model/product_detail_entity.dart';
 import 'dart:convert';
 
 ///首页内容
@@ -40,4 +41,13 @@ Future<CategoryProductListEntity> categoryProductList(
   });
   final resJson = json.decode(response.toString());
   return CategoryProductListEntity.fromJson(resJson);
+}
+
+///商品详情
+Future<ProductDetailEntity> productDetail(String goodId) async {
+  final response = await ApiDio().dio.post('wxmini/getGoodDetailById', data: {
+    'goodId': goodId,
+  });
+  final resJson = json.decode(response.toString());
+  return ProductDetailEntity.fromJson(resJson);
 }
