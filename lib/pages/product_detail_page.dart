@@ -114,7 +114,7 @@ class ProductDetailPage extends StatelessWidget {
                   child: Text(
                     '说明：> 急速送达 > 正品保证',
                     style: TextStyle(
-                        color: Colors.deepOrange[300], fontSize: sp_40),
+                        color: Colors.deepOrangeAccent[100], fontSize: sp_36),
                   ),
                 )
               ],
@@ -123,21 +123,22 @@ class ProductDetailPage extends StatelessWidget {
         ),
       ),
       bottom: TabBar(
-          unselectedLabelColor:
-              innerBoxIsScrolled ? Colors.white70 : Colors.grey[400],
-          labelColor: innerBoxIsScrolled ? Colors.white : Colors.redAccent,
-          indicatorColor: innerBoxIsScrolled ? Colors.white : Colors.redAccent,
-          tabs: tabs
-              .map(
-                (tab) => Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    tab,
-                    style: TextStyle(fontSize: sp_45),
-                  ),
+        unselectedLabelColor:
+            innerBoxIsScrolled ? Colors.white70 : Colors.grey[400],
+        labelColor: innerBoxIsScrolled ? Colors.white : Colors.redAccent,
+        indicatorColor: innerBoxIsScrolled ? Colors.white : Colors.redAccent,
+        tabs: tabs
+            .map(
+              (tab) => Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                child: Text(
+                  tab,
+                  style: TextStyle(fontSize: sp_40),
                 ),
-              )
-              .toList()),
+              ),
+            )
+            .toList(),
+      ),
       forceElevated: innerBoxIsScrolled,
     );
   }
@@ -184,7 +185,9 @@ class ProductDetailPage extends StatelessWidget {
   Widget _buildComments(ProductDetailEntity entity) {
     return Container(
       padding: EdgeInsets.all(10),
-      color: Colors.white,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: lightGrey, width: 1))),
       child: entity.data.goodComments.isNotEmpty
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,12 +199,20 @@ class ProductDetailPage extends StatelessWidget {
                             padding: EdgeInsets.only(top: 10),
                             child: Text(
                               comment.userName,
-                              style: TextStyle(color: Colors.grey[600]),
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: sp_36,
+                              ),
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 10),
-                            child: Text(comment.comments),
+                            child: Text(
+                              comment.comments,
+                              style: TextStyle(
+                                fontSize: sp_36,
+                              ),
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 10, bottom: 10),
@@ -216,7 +227,11 @@ class ProductDetailPage extends StatelessWidget {
                             decoration: BoxDecoration(
                                 border: Border(
                                     bottom: BorderSide(
-                                        color: lightGrey, width: 1))),
+                                        color: entity.data.goodComments.last ==
+                                                comment
+                                            ? Colors.transparent
+                                            : lightGrey,
+                                        width: 1))),
                           )
                         ],
                       ))
@@ -227,7 +242,7 @@ class ProductDetailPage extends StatelessWidget {
               child: Center(
                 child: Text(
                   '暂时还没有评论喔！',
-                  style: TextStyle(color: Colors.grey[600]),
+                  style: TextStyle(color: Colors.grey[600], fontSize: sp_36),
                 ),
               ),
             ),
@@ -254,7 +269,7 @@ class ProductDetailPage extends StatelessWidget {
                       handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
                           context),
                       child: _sliverAppBar(context, entity, innerBoxIsScrolled),
-                    )
+                    ),
                   ],
 
                   ///内容为TabBarView
