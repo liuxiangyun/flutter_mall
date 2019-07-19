@@ -222,7 +222,15 @@ class ProductDetailPage extends StatelessWidget {
                       ))
                   .toList(),
             )
-          : Text('暂无评论'),
+          : Padding(
+              padding: EdgeInsets.only(top: 20, bottom: 20),
+              child: Center(
+                child: Text(
+                  '暂时还没有评论喔！',
+                  style: TextStyle(color: Colors.grey[600]),
+                ),
+              ),
+            ),
     );
   }
 
