@@ -6,6 +6,7 @@ import 'package:flutter_mall/http/api_server.dart';
 import 'package:flutter_mall/res/font.dart';
 import 'package:flutter_mall/res/color.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:common_utils/common_utils.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final tabs = ['详情', '评论'];
@@ -205,9 +206,7 @@ class ProductDetailPage extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.only(top: 10, bottom: 10),
                             child: Text(
-                              DateTime.fromMicrosecondsSinceEpoch(
-                                      comment.discussTime)
-                                  .toString(),
+                              DateUtil.getDateStrByMs(comment.discussTime),
                               style: TextStyle(
                                   color: Colors.grey[600], fontSize: sp_36),
                             ),
@@ -216,8 +215,8 @@ class ProductDetailPage extends StatelessWidget {
                             width: double.infinity,
                             decoration: BoxDecoration(
                                 border: Border(
-                                    bottom:
-                                        BorderSide(color: lightGrey, width: 1))),
+                                    bottom: BorderSide(
+                                        color: lightGrey, width: 1))),
                           )
                         ],
                       ))
