@@ -193,9 +193,9 @@ class FirstLevelCategoryState extends State<LeftFirstLevelCategory> {
 
     return ListView.builder(
       itemBuilder: (context, index) => _createItem(
-            context,
-            widget.firstLevelCategorys[index],
-          ),
+        context,
+        widget.firstLevelCategorys[index],
+      ),
       itemCount: widget.firstLevelCategorys.length,
     );
   }

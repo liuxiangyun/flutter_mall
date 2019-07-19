@@ -104,6 +104,6 @@ AdvertesPicture _$AdvertesPictureFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$AdvertesPictureToJson(AdvertesPicture instance) =>
     <String, dynamic>{
-      'PICTURE_ADDRESS': instance.pICTUREADDRESS,
+      'PICTURE_ADDRESS': instance.pictureAddress,
       'TO_PLACE': instance.tOPLACE
     };

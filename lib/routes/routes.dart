@@ -18,6 +18,14 @@ class Routes {
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(handlerFunc: (context, params) {
       Fluttertoast.showToast(msg: '没找到路由。。。');
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('路由错误'),
+        ),
+        body: Center(
+          child: Text('没找到路由。。。'),
+        ),
+      );
     });
 
     router.define(productDetailPage, handler: productDetailHandler);

@@ -1,11 +1,9 @@
-import 'package:json_annotation/json_annotation.dart'; 
-  
+import 'package:json_annotation/json_annotation.dart';
+
 part 'product_detail_entity.g.dart';
 
-
 @JsonSerializable()
-  class ProductDetailEntity extends Object {
-
+class ProductDetailEntity extends Object {
   @JsonKey(name: 'code')
   String code;
 
@@ -15,18 +13,20 @@ part 'product_detail_entity.g.dart';
   @JsonKey(name: 'data')
   Data data;
 
-  ProductDetailEntity(this.code,this.message,this.data,);
+  ProductDetailEntity(
+    this.code,
+    this.message,
+    this.data,
+  );
 
-  factory ProductDetailEntity.fromJson(Map<String, dynamic> srcJson) => _$ProductDetailEntityFromJson(srcJson);
+  factory ProductDetailEntity.fromJson(Map<String, dynamic> srcJson) =>
+      _$ProductDetailEntityFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$ProductDetailEntityToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class Data extends Object {
-
+class Data extends Object {
   @JsonKey(name: 'goodInfo')
   GoodInfo goodInfo;
 
@@ -36,18 +36,20 @@ part 'product_detail_entity.g.dart';
   @JsonKey(name: 'advertesPicture')
   AdvertesPicture advertesPicture;
 
-  Data(this.goodInfo,this.goodComments,this.advertesPicture,);
+  Data(
+    this.goodInfo,
+    this.goodComments,
+    this.advertesPicture,
+  );
 
-  factory Data.fromJson(Map<String, dynamic> srcJson) => _$DataFromJson(srcJson);
+  factory Data.fromJson(Map<String, dynamic> srcJson) =>
+      _$DataFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$DataToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class GoodInfo extends Object {
-
+class GoodInfo extends Object {
   @JsonKey(name: 'image5')
   String image5;
 
@@ -96,18 +98,33 @@ part 'product_detail_entity.g.dart';
   @JsonKey(name: 'goodsDetail')
   String goodsDetail;
 
-  GoodInfo(this.image5,this.amount,this.image3,this.image4,this.goodsId,this.isOnline,this.image1,this.image2,this.goodsSerialNumber,this.oriPrice,this.presentPrice,this.comPic,this.state,this.shopId,this.goodsName,this.goodsDetail,);
+  GoodInfo(
+    this.image5,
+    this.amount,
+    this.image3,
+    this.image4,
+    this.goodsId,
+    this.isOnline,
+    this.image1,
+    this.image2,
+    this.goodsSerialNumber,
+    this.oriPrice,
+    this.presentPrice,
+    this.comPic,
+    this.state,
+    this.shopId,
+    this.goodsName,
+    this.goodsDetail,
+  );
 
-  factory GoodInfo.fromJson(Map<String, dynamic> srcJson) => _$GoodInfoFromJson(srcJson);
+  factory GoodInfo.fromJson(Map<String, dynamic> srcJson) =>
+      _$GoodInfoFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$GoodInfoToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class GoodComments extends Object {
-
+class GoodComments extends Object {
   @JsonKey(name: 'SCORE')
   int sCORE;
 
@@ -120,30 +137,34 @@ part 'product_detail_entity.g.dart';
   @JsonKey(name: 'discussTime')
   int discussTime;
 
-  GoodComments(this.sCORE,this.comments,this.userName,this.discussTime,);
+  GoodComments(
+    this.sCORE,
+    this.comments,
+    this.userName,
+    this.discussTime,
+  );
 
-  factory GoodComments.fromJson(Map<String, dynamic> srcJson) => _$GoodCommentsFromJson(srcJson);
+  factory GoodComments.fromJson(Map<String, dynamic> srcJson) =>
+      _$GoodCommentsFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$GoodCommentsToJson(this);
-
 }
 
-  
 @JsonSerializable()
-  class AdvertesPicture extends Object {
-
+class AdvertesPicture extends Object {
   @JsonKey(name: 'PICTURE_ADDRESS')
-  String pICTUREADDRESS;
+  String pictureAddress;
 
   @JsonKey(name: 'TO_PLACE')
   String tOPLACE;
 
-  AdvertesPicture(this.pICTUREADDRESS,this.tOPLACE,);
+  AdvertesPicture(
+    this.pictureAddress,
+    this.tOPLACE,
+  );
 
-  factory AdvertesPicture.fromJson(Map<String, dynamic> srcJson) => _$AdvertesPictureFromJson(srcJson);
+  factory AdvertesPicture.fromJson(Map<String, dynamic> srcJson) =>
+      _$AdvertesPictureFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$AdvertesPictureToJson(this);
-
 }
-
-  

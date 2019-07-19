@@ -3,9 +3,9 @@ import 'package:flutter_mall/model/product_detail_entity.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_mall/http/api_server.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_mall/res/font.dart';
 import 'package:flutter_mall/res/color.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class ProductDetailPage extends StatelessWidget {
   final tabs = ['详情', '评论'];
@@ -33,6 +33,7 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
+  ///构建AppBar
   Widget _sliverAppBar(BuildContext context, ProductDetailEntity entity,
       bool innerBoxIsScrolled) {
     return SliverAppBar(
@@ -91,7 +92,7 @@ class ProductDetailPage extends StatelessWidget {
                         child: Text(
                           '市场价：￥${entity.data.goodInfo.oriPrice}',
                           style: TextStyle(
-                            fontSize: sp_36,
+                            fontSize: sp_34,
                             color: Colors.grey[400],
                           ),
                         ),
@@ -111,7 +112,8 @@ class ProductDetailPage extends StatelessWidget {
                   )),
                   child: Text(
                     '说明：> 急速送达 > 正品保证',
-                    style: TextStyle(color: Colors.deepOrangeAccent, fontSize: sp_40),
+                    style: TextStyle(
+                        color: Colors.deepOrange[300], fontSize: sp_40),
                   ),
                 )
               ],
@@ -139,21 +141,90 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _tabView(
+  ///构建TabBarView(详情，评价)
+  Widget _buildTabBarView(
       ProductDetailEntity entity, String tab, BuildContext context) {
     return CustomScrollView(
-        // key 保证唯一性
-        key: PageStorageKey<String>(tab),
-        slivers: <Widget>[
-          // 将子部件同 `SliverAppBar` 重叠部分顶出来，否则会被遮挡
-          SliverOverlapInjector(
-            handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-          ),
-          //TODO html
-          SliverFillRemaining(
-            child: Html(data: entity.data.goodInfo.goodsDetail),
-          )
-        ]);
+      // key 保证唯一性
+      key: PageStorageKey<String>(tab),
+      slivers: <Widget>[
+        // 将子部件同 `SliverAppBar` 重叠部分顶出来，否则会被遮挡
+        SliverOverlapInjector(
+          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate.fixed(<Widget>[
+            tab == tabs[0] ? _buildDetail(entity) : _buildComments(entity),
+            FadeInImage.memoryNetwork(
+              width: double.infinity,
+              placeholder: kTransparentImage,
+              image: entity.data.advertesPicture.pictureAddress,
+              fit: BoxFit.contain,
+            ),
+          ]),
+        ),
+      ],
+    );
+  }
+
+  ///构建详情介绍
+  Widget _buildDetail(ProductDetailEntity entity) {
+    return Html(data: _handleHtml(entity.data.goodInfo.goodsDetail));
+  }
+
+  ///有些值无法解析（无法解析百分比单位，必须写px单位）
+  String _handleHtml(String html) {
+    return html
+        .replaceAll(RegExp('width="100%"'), 'width="${ScreenUtil.screenWidth}"')
+        .replaceAll(RegExp('height="auto" alt=""'), '');
+  }
+
+  ///构建评论
+  Widget _buildComments(ProductDetailEntity entity) {
+    return Container(
+      padding: EdgeInsets.all(10),
+      color: Colors.white,
+      child: entity.data.goodComments.isNotEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: entity.data.goodComments
+                  .map((comment) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: Text(
+                              comment.userName,
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10),
+                            child: Text(comment.comments),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            child: Text(
+                              DateTime.fromMicrosecondsSinceEpoch(
+                                      comment.discussTime)
+                                  .toString(),
+                              style: TextStyle(
+                                  color: Colors.grey[600], fontSize: sp_36),
+                            ),
+                          ),
+                          Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom:
+                                        BorderSide(color: lightGrey, width: 1))),
+                          )
+                        ],
+                      ))
+                  .toList(),
+            )
+          : Text('暂无评论'),
+    );
   }
 
   @override
@@ -164,9 +235,12 @@ class ProductDetailPage extends StatelessWidget {
           if (snapshot.hasData) {
             ProductDetailEntity entity = snapshot.data;
             if (snapshot.data.code == '0') {
+              //tab控制器
               return DefaultTabController(
                 length: tabs.length,
+                //嵌套滚动视图
                 child: NestedScrollView(
+                  //构建嵌套视图
                   headerSliverBuilder: (context, innerBoxIsScrolled) =>
                       <Widget>[
                     SliverOverlapAbsorber(
@@ -175,6 +249,8 @@ class ProductDetailPage extends StatelessWidget {
                       child: _sliverAppBar(context, entity, innerBoxIsScrolled),
                     )
                   ],
+
+                  ///内容为TabBarView
                   body: TabBarView(
                     // 这边需要通过 Builder 来创建 TabBarView 的内容，否则会报错
                     // NestedScrollView.sliverOverlapAbsorberHandleFor must be called with a context that contains a NestedScrollView.
@@ -182,7 +258,7 @@ class ProductDetailPage extends StatelessWidget {
                         .map(
                           (tab) => Builder(
                               builder: (context) =>
-                                  _tabView(entity, tab, context)),
+                                  _buildTabBarView(entity, tab, context)),
                         )
                         .toList(),
                   ),
@@ -225,5 +301,6 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
+  //TODO
   void _refresh() {}
 }

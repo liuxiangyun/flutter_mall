@@ -37,6 +37,7 @@ dependencies:
   event_bus: ^1.1.0
   fluttertoast: ^3.1.0
   fluro: ^1.5.0
+  #无法解析百分比单位，必须写px单位
   flutter_html: ^0.10.4
 
 
@@ -60,7 +61,7 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-#  assets:
+  #  assets:
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
