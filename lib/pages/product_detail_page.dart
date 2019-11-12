@@ -21,16 +21,16 @@ class ProductDetailPage extends StatelessWidget {
       },
       child: innerBoxIsScrolled
           ? Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            )
+        Icons.arrow_back,
+        color: Colors.white,
+      )
           : CircleAvatar(
-              child: Icon(
-                Icons.arrow_back,
-                color: Colors.black,
-              ),
-              backgroundColor: Color(0x00918B81),
-            ),
+        child: Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+        ),
+        backgroundColor: Color(0x00918B81),
+      ),
     );
   }
 
@@ -47,7 +47,10 @@ class ProductDetailPage extends StatelessWidget {
         background: Container(
           color: Colors.white,
           child: Padding(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+            padding: EdgeInsets.only(top: MediaQuery
+                .of(context)
+                .padding
+                .top),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
@@ -63,7 +66,7 @@ class ProductDetailPage extends StatelessWidget {
                   child: Text(
                     entity.data.goodInfo.goodsName,
                     style: TextStyle(
-                      fontSize: sp_45,
+                      fontSize: sp_50,
                     ),
                   ),
                 ),
@@ -79,21 +82,21 @@ class ProductDetailPage extends StatelessWidget {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 10),
+                  EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
                         '￥${entity.data.goodInfo.presentPrice.toString()}',
                         style: TextStyle(
-                            fontSize: sp_45, color: primarySwatchColor),
+                            fontSize: sp_50, color: primarySwatchColor),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 20),
                         child: Text(
                           '市场价：￥${entity.data.goodInfo.oriPrice}',
                           style: TextStyle(
-                            fontSize: sp_34,
+                            fontSize: sp_36,
                             color: Colors.grey[400],
                           ),
                         ),
@@ -108,13 +111,13 @@ class ProductDetailPage extends StatelessWidget {
                   height: ScreenUtil().setWidth(170),
                   decoration: BoxDecoration(
                       border: Border(
-                    top: BorderSide(width: 10, color: lightGrey),
-                    bottom: BorderSide(width: 10, color: lightGrey),
-                  )),
+                        top: BorderSide(width: 10, color: lightGrey),
+                        bottom: BorderSide(width: 10, color: lightGrey),
+                      )),
                   child: Text(
                     '说明：> 急速送达 > 正品保证',
                     style: TextStyle(
-                        color: Colors.deepOrangeAccent[100], fontSize: sp_36),
+                        color: Colors.deepOrangeAccent[100], fontSize: sp_40),
                   ),
                 )
               ],
@@ -124,19 +127,20 @@ class ProductDetailPage extends StatelessWidget {
       ),
       bottom: TabBar(
         unselectedLabelColor:
-            innerBoxIsScrolled ? Colors.white70 : Colors.grey[400],
+        innerBoxIsScrolled ? Colors.white70 : Colors.grey[400],
         labelColor: innerBoxIsScrolled ? Colors.white : Colors.redAccent,
         indicatorColor: innerBoxIsScrolled ? Colors.white : Colors.redAccent,
         tabs: tabs
             .map(
-              (tab) => Padding(
+              (tab) =>
+              Padding(
                 padding: EdgeInsets.only(top: 10, bottom: 10),
                 child: Text(
                   tab,
-                  style: TextStyle(fontSize: sp_40),
+                  style: TextStyle(fontSize: sp_45),
                 ),
               ),
-            )
+        )
             .toList(),
       ),
       forceElevated: innerBoxIsScrolled,
@@ -144,8 +148,8 @@ class ProductDetailPage extends StatelessWidget {
   }
 
   ///构建TabBarView(详情，评价)
-  Widget _buildTabBarView(
-      ProductDetailEntity entity, String tab, BuildContext context) {
+  Widget _buildTabBarView(ProductDetailEntity entity, String tab,
+      BuildContext context) {
     return CustomScrollView(
       // key 保证唯一性
       key: PageStorageKey<String>(tab),
@@ -190,62 +194,63 @@ class ProductDetailPage extends StatelessWidget {
           border: Border(top: BorderSide(color: lightGrey, width: 1))),
       child: entity.data.goodComments.isNotEmpty
           ? Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: entity.data.goodComments
+            .map((comment) =>
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: entity.data.goodComments
-                  .map((comment) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
-                              comment.userName,
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: sp_36,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10),
-                            child: Text(
-                              comment.comments,
-                              style: TextStyle(
-                                fontSize: sp_36,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
-                            child: Text(
-                              DateUtil.getDateStrByMs(comment.discussTime),
-                              style: TextStyle(
-                                  color: Colors.grey[600], fontSize: sp_36),
-                            ),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(
-                                        color: entity.data.goodComments.last ==
-                                                comment
-                                            ? Colors.transparent
-                                            : lightGrey,
-                                        width: 1))),
-                          )
-                        ],
-                      ))
-                  .toList(),
-            )
-          : Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
-              child: Center(
-                child: Text(
-                  '暂时还没有评论喔！',
-                  style: TextStyle(color: Colors.grey[600], fontSize: sp_36),
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    comment.userName,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: sp_38,
+                    ),
+                  ),
                 ),
-              ),
-            ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    comment.comments,
+                    style: TextStyle(
+                      fontSize: sp_38,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text(
+                    DateUtil.getDateStrByMs(comment.discussTime),
+                    style: TextStyle(
+                        color: Colors.grey[600], fontSize: sp_36),
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                              color: entity.data.goodComments.last ==
+                                  comment
+                                  ? Colors.transparent
+                                  : lightGrey,
+                              width: 1))),
+                )
+              ],
+            ))
+            .toList(),
+      )
+          : Padding(
+        padding: EdgeInsets.only(top: 20, bottom: 20),
+        child: Center(
+          child: Text(
+            '暂时还没有评论喔！',
+            style: TextStyle(color: Colors.grey[600], fontSize: sp_38),
+          ),
+        ),
+      ),
     );
   }
 
@@ -257,34 +262,44 @@ class ProductDetailPage extends StatelessWidget {
           if (snapshot.hasData) {
             ProductDetailEntity entity = snapshot.data;
             if (snapshot.data.code == '0') {
-              //tab控制器
-              return DefaultTabController(
-                length: tabs.length,
-                //嵌套滚动视图
-                child: NestedScrollView(
-                  //构建嵌套视图
-                  headerSliverBuilder: (context, innerBoxIsScrolled) =>
-                      <Widget>[
-                    SliverOverlapAbsorber(
-                      handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                          context),
-                      child: _sliverAppBar(context, entity, innerBoxIsScrolled),
-                    ),
-                  ],
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    //tab控制器
+                    child: DefaultTabController(
+                      length: tabs.length,
+                      //嵌套滚动视图
+                      child: NestedScrollView(
+                        //构建嵌套视图
+                        headerSliverBuilder: (context, innerBoxIsScrolled) =>
+                        <Widget>[
+                          SliverOverlapAbsorber(
+                            handle:
+                            NestedScrollView.sliverOverlapAbsorberHandleFor(
+                                context),
+                            child: _sliverAppBar(
+                                context, entity, innerBoxIsScrolled),
+                          ),
+                        ],
 
-                  ///内容为TabBarView
-                  body: TabBarView(
-                    // 这边需要通过 Builder 来创建 TabBarView 的内容，否则会报错
-                    // NestedScrollView.sliverOverlapAbsorberHandleFor must be called with a context that contains a NestedScrollView.
-                    children: tabs
-                        .map(
-                          (tab) => Builder(
-                              builder: (context) =>
-                                  _buildTabBarView(entity, tab, context)),
-                        )
-                        .toList(),
+                        ///内容为TabBarView
+                        body: TabBarView(
+                          // 这边需要通过 Builder 来创建 TabBarView 的内容，否则会报错
+                          // NestedScrollView.sliverOverlapAbsorberHandleFor must be called with a context that contains a NestedScrollView.
+                          children: tabs
+                              .map(
+                                (tab) =>
+                                Builder(
+                                    builder: (context) =>
+                                        _buildTabBarView(entity, tab, context)),
+                          )
+                              .toList(),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  _buildBottom(context),
+                ],
               );
             } else {
               return Center(
@@ -318,10 +333,68 @@ class ProductDetailPage extends StatelessWidget {
             );
           }
         },
-        future: productDetail(productId),
+        future:null,
       ),
     );
   }
+
+  Widget _buildBottom(BuildContext context) {
+    return Container(
+//      margin: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      height: ScreenUtil().setWidth(130),
+      width: double.infinity,
+      child: Row(
+        children: <Widget>[
+          InkWell(
+            onTap: () {},
+            child: Container(
+              color: Colors.white,
+              height: double.infinity,
+              width: ScreenUtil().setWidth(180),
+              child: IconButton(
+                icon: Icon(
+                  Icons.shopping_cart,
+                  color: Colors.red,
+                ),
+                iconSize: 28,
+              ),
+            ),
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.green,
+                alignment: Alignment.center,
+                child: Text(
+                  '加入购物车',
+                  style: TextStyle(color: Colors.white, fontSize: sp_43),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: Colors.red,
+                alignment: Alignment.center,
+                child: Text(
+                  '立即购买',
+                  style: TextStyle(color: Colors.white, fontSize: sp_43),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   //TODO
   void _refresh() {}

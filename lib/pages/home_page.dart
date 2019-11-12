@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage>
             '火爆专区',
             style: TextStyle(
               color: primarySwatchColor,
-              fontSize: sp_40,
+              fontSize: sp_45,
             ),
           ),
         ),
@@ -229,7 +229,7 @@ class _HomePageState extends State<HomePage>
                   product.name,
                   maxLines: 1,
                   style: TextStyle(
-                    fontSize: sp_36,
+                    fontSize: sp_38,
                     color: primarySwatchColor,
                   ),
                 ),
@@ -243,7 +243,7 @@ class _HomePageState extends State<HomePage>
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyle(
-                      fontSize: sp_34,
+                      fontSize: sp_38,
                     ),
                   ),
                 ),
@@ -255,7 +255,7 @@ class _HomePageState extends State<HomePage>
                   style: TextStyle(
                     color: Colors.grey[400],
                     decoration: TextDecoration.lineThrough,
-                    fontSize: sp_26,
+                    fontSize: sp_34,
                   ),
                 )),
               ],
@@ -289,10 +289,20 @@ class SlidesImage extends StatelessWidget {
                   image: slide.image,
                   fit: BoxFit.fill,
                 ),
-                onTap: () => Routes.navigateToProductDetail(
-                  context,
-                  slide.goodsId,
-                ),
+                onTap: () => {
+                  //有些banner返回的是H5链接，不是商品详情
+                  if (slide.goodsId != null &&
+                      slide.goodsId.isNotEmpty &&
+                      !slide.goodsId.contains("/"))
+                    {
+                      Routes.navigateToProductDetail(
+                        context,
+                        slide.goodsId,
+                      )
+                    }
+                  else
+                    {},
+                },
               ),
             )
             .toList(),
@@ -327,7 +337,7 @@ class NavigateCategory extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: sp_36,
+              fontSize: sp_38,
             ),
           ),
         ],
@@ -488,7 +498,7 @@ class ProductRecommend extends StatelessWidget {
       child: Text(
         '商品推荐',
         style:
-            TextStyle(color: Theme.of(context).primaryColor, fontSize: sp_40),
+            TextStyle(color: Theme.of(context).primaryColor, fontSize: sp_45),
       ),
     );
   }
@@ -512,14 +522,14 @@ class ProductRecommend extends StatelessWidget {
             ),
             Text(
               '￥${recommend.mallPrice}',
-              style: TextStyle(fontSize: sp_36),
+              style: TextStyle(fontSize: sp_38),
             ),
             Text(
               '￥${recommend.price}',
               style: TextStyle(
                   color: Colors.grey[400],
                   decoration: TextDecoration.lineThrough,
-                  fontSize: sp_26),
+                  fontSize: sp_34),
             ),
           ],
         ),
@@ -538,7 +548,7 @@ class ProductRecommend extends StatelessWidget {
         _title(context),
         Container(
           alignment: Alignment.topLeft,
-          height: ScreenUtil().setWidth(450),
+          height: ScreenUtil().setWidth(460),
           child: ListView.builder(
               itemBuilder: (context, index) => _createItem(
                     context,

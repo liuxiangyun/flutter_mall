@@ -43,6 +43,12 @@ class CategoryPageState extends State<CategoryPage> {
             CategoryEntity categoryEntity = snapshot.data;
 
             if (categoryEntity.code == '0') {
+              //有些一级分类无二级分类数据，剔除该一级分类
+              categoryEntity.firstLevelCategory.forEach((category) {
+                if (category.secondLevelCategory.isEmpty)
+                  categoryEntity.firstLevelCategory.remove(category);
+              });
+
               return Row(
                 children: <Widget>[
                   Container(
@@ -170,7 +176,7 @@ class FirstLevelCategoryState extends State<LeftFirstLevelCategory> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-              fontSize: sp_36,
+              fontSize: sp_40,
               color: _clickIndex == _index
                   ? Theme.of(context).primaryColor
                   : Theme.of(context).textTheme.title.color),
@@ -235,7 +241,7 @@ class TopSecondLevelCategoryState extends State<TopSecondLevelCategory> {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
-              fontSize: sp_36,
+              fontSize: sp_40,
               color: _clickIndex == _index
                   ? Theme.of(context).primaryColor
                   : Theme.of(context).textTheme.title.color),
@@ -348,7 +354,7 @@ class CategoryProductListState extends State<CategoryProductList> {
                   product.goodsName,
                   maxLines: 1,
                   style: TextStyle(
-                    fontSize: sp_36,
+                    fontSize: sp_38,
                     color: primarySwatchColor,
                   ),
                 ),
@@ -362,7 +368,7 @@ class CategoryProductListState extends State<CategoryProductList> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: TextStyle(
-                      fontSize: sp_34,
+                      fontSize: sp_38,
                     ),
                   ),
                 ),
@@ -374,7 +380,7 @@ class CategoryProductListState extends State<CategoryProductList> {
                   style: TextStyle(
                     color: Colors.grey[400],
                     decoration: TextDecoration.lineThrough,
-                    fontSize: sp_26,
+                    fontSize: sp_34,
                   ),
                 )),
               ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_page.dart';
 import 'category_page.dart';
-import 'cart_page.dart';
+import 'shopping_cart_page.dart';
 import 'member_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,7 +20,7 @@ class _IndexPageState extends State<IndexPage> {
   final List<Widget> pages = [
     HomePage(),
     CategoryPage(),
-    CartPage(),
+    ShoppingCartPage(),
     MemberPage(),
   ];
   final List<BottomNavigationBarItem> bottomNavigationBarItems = [];

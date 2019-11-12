@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 ///购物车
-class CartPage extends StatefulWidget {
+class ShoppingCartPage extends StatefulWidget {
   @override
-  CartPageState createState() => CartPageState();
+  ShoppingCartPageState createState() => ShoppingCartPageState();
 }
 
-class CartPageState extends State<CartPage> {
+class ShoppingCartPageState extends State<ShoppingCartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

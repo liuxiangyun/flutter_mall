@@ -12,18 +12,18 @@ class Routes {
   static final String productDetailPage = '/productDetailPage';
 
   static navigateToProductDetail(BuildContext context, String productId) {
-    Application.router.navigateTo(context, '$productDetailPage?id=$productId');
+      Application.router
+          .navigateTo(context, '$productDetailPage?id=$productId');
   }
 
   static void configureRoutes(Router router) {
     router.notFoundHandler = Handler(handlerFunc: (context, params) {
-      Fluttertoast.showToast(msg: '没找到路由。。。');
       return Scaffold(
         appBar: AppBar(
-          title: Text('路由错误'),
+          title: Text('页面错误'),
         ),
         body: Center(
-          child: Text('没找到路由。。。'),
+          child: Text('无法找到此页面。。。'),
         ),
       );
     });
